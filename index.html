@@ -1,1 +1,1014 @@
-<!DOCTYPE html><html><head><title>MesaPOS</title></head><body><h1>MesaPOS</h1></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MesaPOS — Sistema Digital para Restaurantes</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#05050A;
+  --surface:#0D0D1A;
+  --surface2:#131320;
+  --cyan:#00E5FF;
+  --magenta:#FF2D78;
+  --lime:#BAFF39;
+  --orange:#FF6B2B;
+  --white:#FAFAFA;
+  --muted:#666;
+  --border:rgba(255,255,255,0.07);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Cabinet Grotesk',sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  overflow-x:hidden;
+  line-height:1.6;
+}
+
+/* ─── CURSOR ─── */
+.cursor{
+  position:fixed;width:12px;height:12px;
+  background:var(--cyan);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transition:transform 0.15s ease;
+  mix-blend-mode:difference;
+}
+
+/* ─── GRAIN ─── */
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:1000;opacity:0.4;
+}
+
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:18px 5%;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(5,5,10,0.7);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:1.5rem;font-weight:900;
+  letter-spacing:-0.04em;
+}
+.logo span{
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-links a{
+  font-size:0.85rem;color:var(--muted);text-decoration:none;
+  transition:color 0.2s;
+}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  color:var(--bg);padding:10px 24px;border-radius:100px;
+  font-size:0.85rem;font-weight:700;text-decoration:none;
+  transition:opacity 0.2s,transform 0.2s;
+}
+.nav-cta:hover{opacity:0.9;transform:translateY(-1px)}
+
+/* ─── HERO ─── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:120px 5% 80px;
+  position:relative;overflow:hidden;
+}
+
+/* BG BLOBS */
+.blob{
+  position:absolute;border-radius:50%;
+  filter:blur(120px);opacity:0.15;
+  pointer-events:none;
+}
+.blob1{width:600px;height:600px;background:var(--cyan);top:-200px;right:-100px;}
+.blob2{width:500px;height:500px;background:var(--magenta);bottom:-100px;left:-100px;}
+.blob3{width:400px;height:400px;background:var(--lime);top:50%;right:30%;opacity:0.08;}
+
+.hero-inner{
+  max-width:1300px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:center;position:relative;z-index:2;
+}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,229,255,0.08);
+  border:1px solid rgba(0,229,255,0.25);
+  padding:6px 16px;border-radius:100px;
+  font-size:0.72rem;font-weight:700;
+  color:var(--cyan);letter-spacing:0.1em;
+  text-transform:uppercase;margin-bottom:1.5rem;
+}
+.pulse{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--lime);
+  animation:blink 1.5s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+
+.hero h1{
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:clamp(3rem,5.5vw,5.5rem);
+  font-weight:900;line-height:0.95;
+  letter-spacing:-0.04em;
+  margin-bottom:1.5rem;
+}
+.h1-line2{
+  background:linear-gradient(135deg,var(--cyan) 0%,var(--magenta) 60%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  display:block;
+}
+.h1-line3{
+  background:linear-gradient(135deg,var(--lime) 0%,var(--cyan) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  display:block;
+}
+
+.hero-desc{
+  font-size:1.05rem;color:var(--muted);
+  line-height:1.75;margin-bottom:2.5rem;
+  font-weight:400;max-width:480px;
+}
+.hero-desc strong{color:var(--white);font-weight:700}
+
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+
+.btn-grad{
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  color:var(--bg);padding:15px 32px;border-radius:100px;
+  font-size:0.95rem;font-weight:800;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:all 0.25s;box-shadow:0 0 40px rgba(0,229,255,0.2);
+}
+.btn-grad:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(0,229,255,0.35)}
+
+.btn-ghost{
+  background:transparent;color:var(--white);
+  padding:15px 32px;border-radius:100px;
+  font-size:0.95rem;font-weight:600;text-decoration:none;
+  border:1px solid rgba(255,255,255,0.15);
+  display:inline-flex;align-items:center;gap:8px;
+  transition:all 0.25s;
+}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+
+/* ─── HERO VISUAL ─── */
+.hero-visual{position:relative}
+
+.screen-wrap{
+  background:var(--surface);
+  border:1px solid rgba(0,229,255,0.15);
+  border-radius:24px;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(0,229,255,0.05),
+             0 40px 80px rgba(0,0,0,0.7),
+             0 0 80px rgba(0,229,255,0.08);
+}
+
+.screen-bar{
+  background:var(--surface2);
+  padding:12px 20px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid var(--border);
+}
+.screen-dots{display:flex;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot1{background:#FF5F56}
+.dot2{background:#FFBD2E}
+.dot3{background:#27C93F}
+.screen-url{
+  font-size:0.7rem;color:var(--muted);
+  background:var(--bg);padding:4px 14px;border-radius:100px;
+  border:1px solid var(--border);
+}
+
+.screen-body{padding:16px}
+
+.pos-header-row{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:12px;
+}
+.pos-brand{
+  font-size:0.8rem;font-weight:900;letter-spacing:0.1em;
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.pos-mesa-badge{
+  background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.25);
+  color:var(--cyan);font-size:0.65rem;font-weight:700;
+  padding:3px 10px;border-radius:100px;
+}
+
+.cats{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
+.cat{
+  padding:5px 14px;border-radius:100px;font-size:0.65rem;
+  font-weight:700;white-space:nowrap;
+}
+.cat.on{background:linear-gradient(135deg,var(--cyan),var(--magenta));color:var(--bg)}
+.cat.off{background:var(--surface2);color:var(--muted)}
+
+.prods{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.prod{
+  background:var(--surface2);border-radius:10px;
+  padding:10px;border:1px solid var(--border);
+  cursor:pointer;transition:border-color 0.2s;
+}
+.prod:hover{border-color:rgba(0,229,255,0.3)}
+.prod-n{font-size:0.65rem;font-weight:600;margin-bottom:4px;line-height:1.3}
+.prod-p{
+  font-size:0.7rem;font-weight:800;
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+.total-row{
+  background:linear-gradient(135deg,rgba(0,229,255,0.08),rgba(255,45,120,0.08));
+  border:1px solid rgba(0,229,255,0.15);
+  border-radius:12px;padding:12px 16px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.total-l{font-size:0.7rem;color:var(--muted)}
+.total-amt{
+  font-size:1.1rem;font-weight:900;
+  background:linear-gradient(135deg,var(--cyan),var(--lime));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+/* FLOATING CARDS */
+.fc{
+  position:absolute;background:var(--surface);
+  border:1px solid rgba(0,229,255,0.2);border-radius:14px;
+  padding:10px 14px;font-size:0.72rem;font-weight:600;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+  display:flex;align-items:center;gap:8px;
+  animation:levitate 4s ease-in-out infinite;
+}
+.fc1{top:-30px;right:-10px;animation-delay:0s}
+.fc2{bottom:20px;left:-40px;animation-delay:2s}
+.fc3{top:45%;right:-50px;animation-delay:1s;font-size:0.68rem}
+@keyframes levitate{
+  0%,100%{transform:translateY(0px)}
+  50%{transform:translateY(-10px)}
+}
+.fc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.green{background:var(--lime)}
+.blue{background:var(--cyan)}
+.pink{background:var(--magenta)}
+
+/* ─── TICKER ─── */
+.ticker{
+  padding:16px 0;
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  overflow:hidden;white-space:nowrap;
+}
+.ticker-inner{
+  display:inline-flex;gap:0;
+  animation:tick 20s linear infinite;
+}
+.ticker-item{
+  font-size:0.8rem;font-weight:800;color:var(--bg);
+  padding:0 2rem;letter-spacing:0.05em;text-transform:uppercase;
+}
+.ticker-sep{color:rgba(5,5,10,0.4)}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ─── FEATURES ─── */
+.features{padding:100px 5%}
+.features-inner{max-width:1300px;margin:0 auto}
+
+.tag{
+  display:inline-block;font-size:0.68rem;font-weight:800;
+  letter-spacing:0.18em;text-transform:uppercase;
+  margin-bottom:1rem;
+}
+.tag.cyan{color:var(--cyan)}
+.tag.magenta{color:var(--magenta)}
+.tag.lime{color:var(--lime)}
+
+.section-h{
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:clamp(2.2rem,4vw,3.5rem);
+  font-weight:900;letter-spacing:-0.03em;
+  line-height:1.05;margin-bottom:1rem;
+}
+
+.cards-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;margin-top:3rem;
+}
+
+.feat-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;padding:2rem;
+  position:relative;overflow:hidden;
+  transition:all 0.3s;
+}
+.feat-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:3px;
+  opacity:0;transition:opacity 0.3s;
+}
+.feat-card.c1::before{background:linear-gradient(90deg,var(--cyan),var(--magenta))}
+.feat-card.c2::before{background:linear-gradient(90deg,var(--magenta),var(--orange))}
+.feat-card.c3::before{background:linear-gradient(90deg,var(--lime),var(--cyan))}
+
+.feat-card:hover{
+  border-color:rgba(255,255,255,0.12);
+  transform:translateY(-6px);
+}
+.feat-card:hover::before{opacity:1}
+
+.feat-num{
+  font-size:3rem;font-weight:900;opacity:0.06;
+  position:absolute;top:1rem;right:1.5rem;
+  font-family:'Cabinet Grotesk',sans-serif;
+  letter-spacing:-0.05em;
+}
+
+.feat-icon{
+  width:56px;height:56px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;margin-bottom:1.5rem;
+}
+.feat-icon.i1{background:rgba(0,229,255,0.1)}
+.feat-icon.i2{background:rgba(255,45,120,0.1)}
+.feat-icon.i3{background:rgba(186,255,57,0.1)}
+
+.feat-title{
+  font-size:1.25rem;font-weight:800;
+  letter-spacing:-0.02em;margin-bottom:0.75rem;
+}
+.feat-desc{
+  font-size:0.85rem;color:var(--muted);
+  line-height:1.7;margin-bottom:1.5rem;
+}
+.feat-list{list-style:none;display:flex;flex-direction:column;gap:7px}
+.feat-list li{
+  font-size:0.8rem;color:#aaa;
+  display:flex;align-items:flex-start;gap:8px;
+}
+.feat-list li::before{
+  content:'→';font-size:0.7rem;
+  margin-top:2px;flex-shrink:0;
+}
+.feat-card.c1 .feat-list li::before{color:var(--cyan)}
+.feat-card.c2 .feat-list li::before{color:var(--magenta)}
+.feat-card.c3 .feat-list li::before{color:var(--lime)}
+
+/* ─── BOT SECTION ─── */
+.bot-sec{
+  padding:100px 5%;
+  background:var(--surface);
+  position:relative;overflow:hidden;
+}
+.bot-sec::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--magenta),transparent);
+}
+.bot-sec::after{
+  content:'';position:absolute;
+  bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+}
+
+.bot-inner{
+  max-width:1300px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:center;
+}
+
+.bot-chat{
+  background:var(--bg);
+  border:1px solid rgba(255,45,120,0.2);
+  border-radius:24px;overflow:hidden;
+  box-shadow:0 0 60px rgba(255,45,120,0.08);
+}
+.wh-bar{
+  background:#1F2C34;
+  padding:14px 18px;
+  display:flex;align-items:center;gap:12px;
+}
+.wh-ava{
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;flex-shrink:0;
+}
+.wh-name{font-size:0.88rem;font-weight:700}
+.wh-status{font-size:0.65rem;color:#67C15E}
+
+.msgs{
+  padding:16px;background:#0D1117;
+  display:flex;flex-direction:column;gap:10px;
+  min-height:320px;
+}
+.m{
+  max-width:82%;padding:9px 13px;
+  border-radius:12px;font-size:0.78rem;line-height:1.55;
+}
+.m.b{
+  background:#1A2733;
+  border:1px solid rgba(255,255,255,0.04);
+  align-self:flex-start;border-bottom-left-radius:3px;
+}
+.m.u{
+  background:linear-gradient(135deg,rgba(0,229,255,0.15),rgba(255,45,120,0.15));
+  border:1px solid rgba(0,229,255,0.1);
+  align-self:flex-end;border-bottom-right-radius:3px;
+  color:var(--white);
+}
+.m-t{font-size:0.6rem;color:var(--muted);margin-top:2px}
+.hi{color:var(--cyan);font-weight:700}
+.hm{color:var(--magenta);font-weight:700}
+.hl{color:var(--lime);font-weight:700}
+
+/* ─── STATS ─── */
+.stats-sec{
+  padding:80px 5%;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.stats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:2rem;max-width:1000px;margin:0 auto;text-align:center;
+}
+.stat-n{
+  font-size:3rem;font-weight:900;line-height:1;margin-bottom:8px;
+  font-family:'Cabinet Grotesk',sans-serif;letter-spacing:-0.03em;
+}
+.s1{background:linear-gradient(135deg,var(--cyan),var(--lime));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.s2{background:linear-gradient(135deg,var(--magenta),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.s3{background:linear-gradient(135deg,var(--lime),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.s4{background:linear-gradient(135deg,var(--orange),var(--magenta));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-l{font-size:0.78rem;color:var(--muted);font-weight:500}
+
+/* ─── PRECIOS ─── */
+.pricing{padding:100px 5%}
+.pricing-inner{max-width:1100px;margin:0 auto}
+
+.plans{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;margin-top:3rem;
+}
+.plan{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:24px;padding:2rem;
+  position:relative;transition:all 0.3s;
+}
+.plan:hover{transform:translateY(-6px)}
+
+.plan.hot{
+  background:linear-gradient(145deg,var(--surface) 0%,rgba(0,229,255,0.04) 100%);
+  border:1px solid rgba(0,229,255,0.25);
+  box-shadow:0 0 60px rgba(0,229,255,0.07);
+}
+.hot-badge{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  color:var(--bg);font-size:0.62rem;font-weight:800;
+  padding:4px 18px;border-radius:100px;white-space:nowrap;
+  letter-spacing:0.08em;text-transform:uppercase;
+}
+
+.plan-tier{
+  font-size:0.65rem;font-weight:800;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:1rem;
+}
+.plan-usd{
+  font-size:3.5rem;font-weight:900;line-height:1;margin-bottom:4px;
+  font-family:'Cabinet Grotesk',sans-serif;letter-spacing:-0.04em;
+}
+.plan.hot .plan-usd{
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.plan-per{font-size:0.78rem;color:var(--muted);margin-bottom:1.5rem}
+
+.plan-feats{
+  list-style:none;display:flex;flex-direction:column;
+  gap:9px;margin-bottom:2rem;
+}
+.plan-feats li{
+  font-size:0.82rem;display:flex;align-items:flex-start;gap:8px;
+}
+.plan-feats li.y{color:var(--white)}
+.plan-feats li.y::before{content:'✓';color:var(--lime);flex-shrink:0}
+.plan-feats li.n{color:#333}
+.plan-feats li.n::before{content:'–';color:#2A2A2A;flex-shrink:0}
+
+.plan-btn{
+  display:block;text-align:center;padding:13px;
+  border-radius:100px;font-size:0.88rem;font-weight:800;
+  text-decoration:none;transition:all 0.2s;letter-spacing:0.02em;
+}
+.plan-btn.outline{
+  border:1px solid rgba(255,255,255,0.12);color:var(--white);
+}
+.plan-btn.outline:hover{border-color:var(--cyan);color:var(--cyan)}
+.plan-btn.filled{
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  color:var(--bg);box-shadow:0 0 30px rgba(0,229,255,0.2);
+}
+.plan-btn.filled:hover{box-shadow:0 0 50px rgba(0,229,255,0.35);transform:translateY(-2px)}
+
+/* ─── PAISES ─── */
+.paises{padding:80px 5%;text-align:center;background:var(--surface)}
+.paises-row{
+  display:flex;justify-content:center;gap:2rem;
+  margin-top:3rem;flex-wrap:wrap;
+}
+.pais{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:20px;padding:2rem 3rem;
+  transition:all 0.3s;
+}
+.pais:hover{transform:translateY(-4px);border-color:rgba(0,229,255,0.2)}
+.pais-flag{font-size:3rem;margin-bottom:10px}
+.pais-name{
+  font-size:1.2rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:10px;
+}
+.pais-pays{font-size:0.78rem;color:var(--muted);line-height:1.8}
+
+/* ─── TESTIMONIAL ─── */
+.testi{
+  padding:100px 5%;text-align:center;
+  position:relative;overflow:hidden;
+}
+.testi::before{
+  content:'';position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  width:800px;height:400px;
+  background:radial-gradient(ellipse,rgba(0,229,255,0.05) 0%,transparent 70%);
+}
+.testi-quote{
+  font-size:clamp(1.4rem,3.5vw,2.4rem);
+  font-weight:800;line-height:1.35;
+  letter-spacing:-0.02em;
+  max-width:900px;margin:0 auto 2rem;
+  position:relative;
+}
+.testi-quote em{
+  font-style:normal;
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.testi-who{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+}
+.testi-ava{
+  width:48px;height:48px;border-radius:50%;
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;
+}
+.testi-n{font-size:0.95rem;font-weight:800;letter-spacing:-0.01em}
+.testi-r{font-size:0.75rem;color:var(--muted)}
+
+/* ─── CTA ─── */
+.cta{
+  padding:120px 5%;text-align:center;
+  background:var(--surface);position:relative;overflow:hidden;
+}
+.cta::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+}
+.cta-blob{
+  position:absolute;width:700px;height:700px;
+  border-radius:50%;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(0,229,255,0.06) 0%,rgba(255,45,120,0.04) 50%,transparent 70%);
+  pointer-events:none;
+}
+.cta h2{
+  font-size:clamp(2.5rem,6vw,5rem);
+  font-weight:900;letter-spacing:-0.04em;
+  line-height:0.95;margin-bottom:1.5rem;
+  position:relative;
+}
+.cta h2 span{
+  background:linear-gradient(135deg,var(--cyan),var(--magenta),var(--lime));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.cta p{
+  font-size:1.05rem;color:var(--muted);
+  margin-bottom:3rem;position:relative;
+}
+.cta-row{
+  display:flex;gap:16px;justify-content:center;
+  flex-wrap:wrap;position:relative;
+}
+
+.btn-wa{
+  background:#25D366;color:white;
+  padding:16px 36px;border-radius:100px;
+  font-size:0.95rem;font-weight:800;text-decoration:none;
+  display:inline-flex;align-items:center;gap:10px;
+  transition:all 0.25s;box-shadow:0 0 40px rgba(37,211,102,0.2);
+}
+.btn-wa:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(37,211,102,0.35)}
+
+.btn-tg{
+  background:#229ED9;color:white;
+  padding:16px 36px;border-radius:100px;
+  font-size:0.95rem;font-weight:800;text-decoration:none;
+  display:inline-flex;align-items:center;gap:10px;
+  transition:all 0.25s;box-shadow:0 0 40px rgba(34,158,217,0.2);
+}
+.btn-tg:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(34,158,217,0.35)}
+
+/* ─── FOOTER ─── */
+footer{
+  padding:40px 5%;
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:1rem;
+}
+.f-logo{font-weight:900;font-size:1.1rem;letter-spacing:-0.03em}
+.f-logo span{
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+footer p{font-size:0.75rem;color:var(--muted)}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .hero-inner,.bot-inner{grid-template-columns:1fr}
+  .hero-visual,.bot-visual-side{display:none}
+  .cards-grid,.plans,.stats-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .nav-links{display:none}
+}
+
+/* ─── FADE IN ─── */
+.fi{opacity:0;transform:translateY(40px);transition:opacity 0.7s ease,transform 0.7s ease}
+.fi.v{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Mesa<span>POS</span></div>
+  <div class="nav-links">
+    <a href="#productos">Productos</a>
+    <a href="#precios">Precios</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+  <a href="https://wa.me/56964629963?text=Hola,%20quiero%20info%20sobre%20MesaPOS" class="nav-cta" target="_blank">Solicitar demo →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow"><span class="pulse"></span>Sistema digital para restaurantes</div>
+      <h1>
+        Tu restaurante<br>
+        <span class="h1-line2">en modo</span>
+        <span class="h1-line3">digital.</span>
+      </h1>
+      <p class="hero-desc">
+        <strong>POS web + Bot WhatsApp + Menú QR.</strong><br>
+        Todo integrado, sin instalaciones complicadas, funcionando en 24 horas. Para Chile y Venezuela.
+      </p>
+      <div class="hero-btns">
+        <a href="https://wa.me/56964629963?text=Hola,%20quiero%20una%20demo%20de%20MesaPOS" class="btn-grad" target="_blank">
+          💬 Hablar ahora
+        </a>
+        <a href="#precios" class="btn-ghost">Ver planes →</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="screen-wrap">
+        <div class="screen-bar">
+          <div class="screen-dots">
+            <div class="dot dot1"></div>
+            <div class="dot dot2"></div>
+            <div class="dot dot3"></div>
+          </div>
+          <div class="screen-url">mesapos.app/caja</div>
+          <div></div>
+        </div>
+        <div class="screen-body">
+          <div class="pos-header-row">
+            <span class="pos-brand">MESAPOS</span>
+            <span class="pos-mesa-badge">Mesa 4 · 3 pax</span>
+          </div>
+          <div class="cats">
+            <div class="cat on">Combos</div>
+            <div class="cat off">Burgers</div>
+            <div class="cat off">Bebidas</div>
+            <div class="cat off">Postres</div>
+          </div>
+          <div class="prods">
+            <div class="prod"><div class="prod-n">Combo Clásico</div><div class="prod-p">$8.500</div></div>
+            <div class="prod"><div class="prod-n">Combo Especial</div><div class="prod-p">$12.000</div></div>
+            <div class="prod"><div class="prod-n">½ Pollo Brasa</div><div class="prod-p">$15.500</div></div>
+            <div class="prod"><div class="prod-n">Burger BBQ</div><div class="prod-p">$9.990</div></div>
+            <div class="prod"><div class="prod-n">Arepa Mixta</div><div class="prod-p">$6.500</div></div>
+            <div class="prod"><div class="prod-n">Full Familiar</div><div class="prod-p">$27.500</div></div>
+          </div>
+          <div class="total-row">
+            <div><div class="total-l">3 items · Efectivo</div></div>
+            <div class="total-amt">$37.990</div>
+          </div>
+        </div>
+      </div>
+      <div class="fc fc1"><span class="fc-dot green"></span>Comanda #058 ✓</div>
+      <div class="fc fc2"><span class="fc-dot blue"></span>🤖 Bot: 5 pedidos hoy</div>
+      <div class="fc fc3"><span class="fc-dot pink"></span>Turno 2 abierto</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">POS Web ✦</span>
+    <span class="ticker-item">Bot WhatsApp ✦</span>
+    <span class="ticker-item">Menú QR ✦</span>
+    <span class="ticker-item">Sin instalación ✦</span>
+    <span class="ticker-item">Chile & Venezuela ✦</span>
+    <span class="ticker-item">Desde $15 USD/mes ✦</span>
+    <span class="ticker-item">24 horas para activar ✦</span>
+    <span class="ticker-item">POS Web ✦</span>
+    <span class="ticker-item">Bot WhatsApp ✦</span>
+    <span class="ticker-item">Menú QR ✦</span>
+    <span class="ticker-item">Sin instalación ✦</span>
+    <span class="ticker-item">Chile & Venezuela ✦</span>
+    <span class="ticker-item">Desde $15 USD/mes ✦</span>
+    <span class="ticker-item">24 horas para activar ✦</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-sec">
+  <div class="stats-grid">
+    <div class="fi"><div class="stat-n s1">24h</div><div class="stat-l">Para estar operativo</div></div>
+    <div class="fi"><div class="stat-n s2">3</div><div class="stat-l">Herramientas en 1</div></div>
+    <div class="fi"><div class="stat-n s3">$0</div><div class="stat-l">Costo de instalación</div></div>
+    <div class="fi"><div class="stat-n s4">24/7</div><div class="stat-l">Bot tomando pedidos</div></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="productos">
+  <div class="features-inner">
+    <div class="tag cyan fi">Lo que incluye</div>
+    <h2 class="section-h fi">Tres herramientas.<br>Un ecosistema.</h2>
+    <div class="cards-grid">
+      <div class="feat-card c1 fi">
+        <div class="feat-num">01</div>
+        <div class="feat-icon i1">🖥️</div>
+        <div class="feat-title">POS Web</div>
+        <p class="feat-desc">Sistema de caja 100% desde el navegador. Sin instalaciones, funciona en cualquier dispositivo con Chrome.</p>
+        <ul class="feat-list">
+          <li>Gestión de mesas y comandas</li>
+          <li>Impresión de tickets 80mm</li>
+          <li>PDA inalámbrica para garzones</li>
+          <li>Múltiples métodos de pago</li>
+          <li>Apertura y cierre por turno</li>
+          <li>Reportes en tiempo real</li>
+        </ul>
+      </div>
+      <div class="feat-card c2 fi">
+        <div class="feat-num">02</div>
+        <div class="feat-icon i2">🤖</div>
+        <div class="feat-title">Bot WhatsApp</div>
+        <p class="feat-desc">Un vendedor automático 24/7. Toma pedidos, calcula totales, gestiona delivery y cobra sin que hagas nada.</p>
+        <ul class="feat-list">
+          <li>Atiende múltiples clientes a la vez</li>
+          <li>Muestra menú con precios</li>
+          <li>Gestiona delivery y retiro</li>
+          <li>Cobra transferencia o efectivo</li>
+          <li>Confirma el pedido automáticamente</li>
+          <li>Conectado a tu base de datos</li>
+        </ul>
+      </div>
+      <div class="feat-card c3 fi">
+        <div class="feat-num">03</div>
+        <div class="feat-icon i3">📱</div>
+        <div class="feat-title">Menú Digital QR</div>
+        <p class="feat-desc">Tu carta digital que el cliente escanea en la mesa. Siempre actualizada, sin papel, sin app que descargar.</p>
+        <ul class="feat-list">
+          <li>Código QR por mesa</li>
+          <li>Actualización instantánea</li>
+          <li>Sin app ni descarga</li>
+          <li>Fotos y descripción de platos</li>
+          <li>Permite hacer pedidos</li>
+          <li>Funciona en cualquier celular</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOT SECTION -->
+<section class="bot-sec">
+  <div class="bot-inner">
+    <div class="bot-chat fi">
+      <div class="wh-bar">
+        <div class="wh-ava">🍽️</div>
+        <div>
+          <div class="wh-name">Tu Restaurante</div>
+          <div class="wh-status">● en línea</div>
+        </div>
+      </div>
+      <div class="msgs">
+        <div><div class="m u">Hola buenas tardes</div></div>
+        <div><div class="m b">¡Hola! 👋 Bienvenido. ¿Qué te apetece hoy? Tenemos <span class="hi">pollo a la brasa</span>, burgers, arepas y mucho más.</div></div>
+        <div><div class="m u">Un arroz especial porfa, delivery</div></div>
+        <div><div class="m b"><span class="hm">Arroz Especial Cerdo-Camarón</span> = $10.000<br>+ Delivery $2.500<br><span class="hl">Total: $12.500 ✓</span><br><br>¿Cuál es tu dirección?</div></div>
+        <div><div class="m u">Barros Arana 2450</div></div>
+        <div><div class="m b">🎉 <strong>Pedido confirmado.</strong> El repartidor te llama cuando salga.<br><br>¡Gracias por tu compra! 🙌</div></div>
+      </div>
+    </div>
+
+    <div class="fi">
+      <div class="tag magenta">El diferenciador</div>
+      <h2 class="section-h">El bot<br>vende solo.</h2>
+      <p style="color:var(--muted);font-size:1rem;line-height:1.75;margin-bottom:2rem;font-weight:400">
+        Un cliente escribe, el bot lo atiende, toma el pedido, gestiona el pago y confirma — sin que tú hagas absolutamente nada.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:12px;font-size:0.88rem;color:#ccc">
+          <span style="color:var(--lime);font-size:1.2rem">✓</span> Atiende múltiples clientes al mismo tiempo
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:0.88rem;color:#ccc">
+          <span style="color:var(--lime);font-size:1.2rem">✓</span> Funciona las 24 horas, nunca se cansa
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:0.88rem;color:#ccc">
+          <span style="color:var(--lime);font-size:1.2rem">✓</span> Cobra por transferencia o efectivo
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:0.88rem;color:#ccc">
+          <span style="color:var(--lime);font-size:1.2rem">✓</span> Conectado en tiempo real con tu menú
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:0.88rem;color:#ccc">
+          <span style="color:var(--lime);font-size:1.2rem">✓</span> Reduce errores y ahorra horas de trabajo
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRECIOS -->
+<section class="pricing" id="precios">
+  <div class="pricing-inner">
+    <div style="text-align:center;margin-bottom:1rem">
+      <div class="tag lime fi" style="display:inline-block">Planes</div>
+    </div>
+    <h2 class="section-h fi" style="text-align:center;max-width:100%">Precio fijo.<br>Sin sorpresas.</h2>
+    <p class="fi" style="text-align:center;color:var(--muted);font-size:1rem;margin-top:0.5rem">En USD. Funciona para Chile y Venezuela. Sin permanencia mínima.</p>
+
+    <div class="plans">
+      <div class="plan fi">
+        <div class="plan-tier">Básico</div>
+        <div class="plan-usd">$15</div>
+        <div class="plan-per">USD / mes</div>
+        <ul class="plan-feats">
+          <li class="y">POS web completo</li>
+          <li class="y">1 terminal</li>
+          <li class="y">Impresión de tickets</li>
+          <li class="y">Menú digital QR</li>
+          <li class="y">Reportes de ventas</li>
+          <li class="n">Bot WhatsApp</li>
+          <li class="n">PDA inalámbrica</li>
+        </ul>
+        <a href="https://wa.me/56964629963?text=Quiero%20el%20Plan%20Básico%20de%20MesaPOS" class="plan-btn outline" target="_blank">Contratar →</a>
+      </div>
+
+      <div class="plan hot fi">
+        <div class="hot-badge">⭐ Más popular</div>
+        <div class="plan-tier">Pro</div>
+        <div class="plan-usd">$25</div>
+        <div class="plan-per">USD / mes</div>
+        <ul class="plan-feats">
+          <li class="y">POS web completo</li>
+          <li class="y">2 terminales + PDA</li>
+          <li class="y">Impresión de tickets</li>
+          <li class="y">Menú digital QR</li>
+          <li class="y">Bot WhatsApp incluido</li>
+          <li class="y">Reportes avanzados</li>
+          <li class="y">Soporte remoto</li>
+        </ul>
+        <a href="https://wa.me/56964629963?text=Quiero%20el%20Plan%20Pro%20de%20MesaPOS" class="plan-btn filled" target="_blank">Contratar →</a>
+      </div>
+
+      <div class="plan fi">
+        <div class="plan-tier">Premium</div>
+        <div class="plan-usd">$45</div>
+        <div class="plan-per">USD / mes</div>
+        <ul class="plan-feats">
+          <li class="y">Todo lo del plan Pro</li>
+          <li class="y">Terminales ilimitadas</li>
+          <li class="y">Bot personalizado</li>
+          <li class="y">Diseño a tu marca</li>
+          <li class="y">Soporte prioritario 24/7</li>
+          <li class="y">Capacitación incluida</li>
+          <li class="y">Actualizaciones gratis</li>
+        </ul>
+        <a href="https://wa.me/56964629963?text=Quiero%20el%20Plan%20Premium%20de%20MesaPOS" class="plan-btn outline" target="_blank">Contratar →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAISES -->
+<section class="paises">
+  <div class="tag cyan fi" style="display:inline-block">Disponible en</div>
+  <h2 class="section-h fi" style="text-align:center;max-width:100%;margin:0.5rem auto 0">Chile y Venezuela</h2>
+  <div class="paises-row">
+    <div class="pais fi">
+      <div class="pais-flag">🇨🇱</div>
+      <div class="pais-name">Chile</div>
+      <div class="pais-pays">Transferencia bancaria<br>Tarjeta débito / crédito<br>WebPay</div>
+    </div>
+    <div class="pais fi">
+      <div class="pais-flag">🇻🇪</div>
+      <div class="pais-name">Venezuela</div>
+      <div class="pais-pays">Zelle · PayPal<br>USDT · Binance Pay<br>Telegram</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testi">
+  <div class="testi-quote fi">
+    "Desde que instalamos MesaPOS, <em>el bot toma pedidos solo por WhatsApp</em>, imprimimos tickets desde cualquier dispositivo y los cierres de caja son mucho más rápidos y ordenados."
+  </div>
+  <div class="testi-who fi">
+    <div class="testi-ava">🍽️</div>
+    <div>
+      <div class="testi-n">La Felicitta</div>
+      <div class="testi-r">Restaurante · Iquique, Chile · Cliente desde 2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta" id="contacto">
+  <div class="cta-blob"></div>
+  <h2 class="fi">¿Listo para<br><span>digitalizar</span><br>tu restaurante?</h2>
+  <p class="fi">Escríbenos hoy — activamos tu sistema en 24 horas.</p>
+  <div class="cta-row fi">
+    <a href="https://wa.me/56964629963?text=Hola,%20quiero%20digitalizar%20mi%20restaurante%20con%20MesaPOS" class="btn-wa" target="_blank">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp · Chile
+    </a>
+    <a href="https://t.me/mesapos" class="btn-tg" target="_blank">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      Telegram · Venezuela
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">Mesa<span>POS</span></div>
+  <p>Sistema digital para restaurantes · Chile & Venezuela · 2026</p>
+  <p>mesapos.app</p>
+</footer>
+
+<script>
+// Cursor
+const cur = document.getElementById('cur');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX - 6 + 'px';
+  cur.style.top = e.clientY - 6 + 'px';
+});
+
+// Scroll animations
+const io = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('v'), i * 80);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fi').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
