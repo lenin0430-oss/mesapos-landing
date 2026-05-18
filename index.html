@@ -1,1014 +1,829 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MesaPOS — Sistema Digital para Restaurantes</title>
-<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#05050A;
-  --surface:#0D0D1A;
-  --surface2:#131320;
-  --cyan:#00E5FF;
-  --magenta:#FF2D78;
-  --lime:#BAFF39;
-  --orange:#FF6B2B;
-  --white:#FAFAFA;
-  --muted:#666;
+  --ink:#0A0A0A;
+  --ink2:#111111;
+  --ink3:#1A1A1A;
+  --orange:#FF5C00;
+  --orange2:#FF7A2E;
+  --orange-pale:rgba(255,92,0,0.08);
+  --orange-glow:rgba(255,92,0,0.15);
+  --cream:#F5F0E8;
+  --cream2:#EDE8DD;
+  --white:#FAFAF7;
+  --gray:#888880;
+  --gray2:#555550;
   --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.12);
+  --syne:'Syne',sans-serif;
+  --inter:'Inter',sans-serif;
 }
 html{scroll-behavior:smooth}
-body{
-  font-family:'Cabinet Grotesk',sans-serif;
-  background:var(--bg);
-  color:var(--white);
-  overflow-x:hidden;
-  line-height:1.6;
-}
+body{font-family:var(--inter);background:var(--ink);color:var(--white);overflow-x:hidden;line-height:1.6;font-size:16px}
+a{text-decoration:none;color:inherit}
 
-/* ─── CURSOR ─── */
-.cursor{
-  position:fixed;width:12px;height:12px;
-  background:var(--cyan);border-radius:50%;
-  pointer-events:none;z-index:9999;
-  transition:transform 0.15s ease;
-  mix-blend-mode:difference;
-}
-
-/* ─── GRAIN ─── */
-body::after{
-  content:'';position:fixed;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events:none;z-index:1000;opacity:0.4;
-}
-
-/* ─── NAV ─── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  padding:18px 5%;
-  display:flex;justify-content:space-between;align-items:center;
-  background:rgba(5,5,10,0.7);
-  backdrop-filter:blur(24px);
-  border-bottom:1px solid var(--border);
-}
-.logo{
-  font-family:'Cabinet Grotesk',sans-serif;
-  font-size:1.5rem;font-weight:900;
-  letter-spacing:-0.04em;
-}
-.logo span{
-  background:linear-gradient(135deg,var(--cyan),var(--magenta));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(10,10,10,0.85);backdrop-filter:blur(20px)}
+.logo{font-family:var(--syne);font-size:1.35rem;font-weight:800;letter-spacing:-0.02em;color:var(--white)}
+.logo span{color:var(--orange)}
 .nav-links{display:flex;gap:2rem;align-items:center}
-.nav-links a{
-  font-size:0.85rem;color:var(--muted);text-decoration:none;
-  transition:color 0.2s;
-}
+.nav-links a{font-size:0.82rem;color:var(--gray);font-weight:400;transition:color 0.2s;letter-spacing:0.02em}
 .nav-links a:hover{color:var(--white)}
-.nav-cta{
-  background:linear-gradient(135deg,var(--cyan),var(--magenta));
-  color:var(--bg);padding:10px 24px;border-radius:100px;
-  font-size:0.85rem;font-weight:700;text-decoration:none;
-  transition:opacity 0.2s,transform 0.2s;
-}
-.nav-cta:hover{opacity:0.9;transform:translateY(-1px)}
+.nav-cta{background:var(--orange);color:var(--white)!important;padding:0.55rem 1.25rem;border-radius:6px;font-weight:600!important;font-size:0.82rem!important;letter-spacing:0.01em!important;transition:all 0.2s!important}
+.nav-cta:hover{background:var(--orange2)!important;transform:translateY(-1px)!important}
 
-/* ─── HERO ─── */
-.hero{
-  min-height:100vh;
-  display:flex;align-items:center;
-  padding:120px 5% 80px;
-  position:relative;overflow:hidden;
-}
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:7rem 2.5rem 5rem;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 60% -10%,rgba(255,92,0,0.12) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at 50% 0%,black 0%,transparent 70%)}
+.hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.1fr 0.9fr;gap:5rem;align-items:center;width:100%;position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:0.6rem;font-size:0.72rem;font-weight:500;color:var(--orange);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:1.5rem;padding:0.35rem 0.85rem 0.35rem 0.5rem;border:1px solid rgba(255,92,0,0.25);border-radius:100px;background:rgba(255,92,0,0.06)}
+.eyebrow-dot{width:6px;height:6px;background:var(--orange);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,92,0,0.4)}50%{opacity:0.6;box-shadow:0 0 0 5px rgba(255,92,0,0)}}
+h1{font-family:var(--syne);font-size:clamp(2.8rem,5.5vw,4.4rem);font-weight:800;line-height:1.02;letter-spacing:-0.03em;color:var(--white);margin-bottom:1.5rem}
+h1 .highlight{color:var(--orange);display:block}
+h1 .underline-word{position:relative;white-space:nowrap}
+h1 .underline-word::after{content:'';position:absolute;left:0;bottom:-4px;width:100%;height:3px;background:var(--orange);border-radius:2px}
+.hero-desc{font-size:1.05rem;color:var(--gray);line-height:1.75;margin-bottom:2.25rem;max-width:480px;font-weight:300}
+.hero-desc strong{color:var(--white);font-weight:500}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.btn-orange{display:inline-flex;align-items:center;gap:0.5rem;background:var(--orange);color:var(--white);padding:0.9rem 1.75rem;border-radius:8px;font-weight:600;font-size:0.95rem;transition:all 0.2s;box-shadow:0 0 0 0 rgba(255,92,0,0.4);letter-spacing:0.01em}
+.btn-orange:hover{background:var(--orange2);transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,92,0,0.35)}
+.btn-outline{display:inline-flex;align-items:center;gap:0.5rem;border:1px solid var(--border2);color:var(--white);padding:0.9rem 1.75rem;border-radius:8px;font-weight:400;font-size:0.95rem;transition:all 0.2s}
+.btn-outline:hover{border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04)}
+.hero-trust{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.trust-item{font-size:0.78rem;color:var(--gray2);display:flex;align-items:center;gap:0.4rem}
+.trust-check{color:var(--orange);font-size:0.75rem}
+.trust-sep{width:1px;height:12px;background:var(--border2)}
 
-/* BG BLOBS */
-.blob{
-  position:absolute;border-radius:50%;
-  filter:blur(120px);opacity:0.15;
-  pointer-events:none;
-}
-.blob1{width:600px;height:600px;background:var(--cyan);top:-200px;right:-100px;}
-.blob2{width:500px;height:500px;background:var(--magenta);bottom:-100px;left:-100px;}
-.blob3{width:400px;height:400px;background:var(--lime);top:50%;right:30%;opacity:0.08;}
+/* HERO VISUAL */
+.pos-screen{background:#0F0F0F;border:1px solid var(--border2);border-radius:14px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.05)}
+.pos-topbar{padding:0.7rem 1rem;background:#0A0A0A;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.75rem}
+.pos-dots{display:flex;gap:5px}
+.pos-dot{width:9px;height:9px;border-radius:50%}
+.pos-title{font-size:0.65rem;color:var(--gray2);flex:1;text-align:center;font-family:var(--inter);letter-spacing:0.05em}
+.pos-body{padding:1rem}
+.pos-row{display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;margin-bottom:0.65rem}
+.pos-card{background:#161616;border:1px solid var(--border);border-radius:10px;padding:0.85rem}
+.pos-clabel{font-size:0.6rem;color:var(--gray2);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.35rem}
+.pos-cval{font-size:1.25rem;font-weight:700;font-family:var(--syne);color:var(--white)}
+.pos-cval.orange{color:var(--orange)}
+.pos-badge{display:inline-block;font-size:0.58rem;padding:2px 7px;border-radius:4px;margin-top:0.25rem;font-weight:500}
+.badge-up{background:rgba(74,222,128,0.1);color:#4ADE80}
+.badge-warn{background:rgba(255,92,0,0.12);color:var(--orange)}
+.pos-list{background:#161616;border:1px solid var(--border);border-radius:10px;padding:0.85rem}
+.pos-list-title{font-size:0.6rem;color:var(--gray2);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.6rem}
+.pos-order{display:flex;align-items:center;justify-content:space-between;padding:0.45rem 0;border-bottom:1px solid var(--border);gap:0.5rem}
+.pos-order:last-child{border-bottom:none}
+.pos-oname{font-size:0.72rem;color:var(--white);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pos-ostatus{font-size:0.6rem;padding:2px 8px;border-radius:4px;white-space:nowrap;font-weight:500}
+.s-done{background:rgba(74,222,128,0.1);color:#4ADE80}
+.s-bot{background:rgba(139,92,246,0.12);color:#A78BFA}
+.s-new{background:rgba(255,92,0,0.12);color:var(--orange)}
+.pos-oprice{font-size:0.72rem;font-weight:600;color:var(--white);white-space:nowrap}
+.float-pill{position:absolute;bottom:-16px;left:-16px;background:var(--ink2);border:1px solid var(--border2);border-radius:10px;padding:0.65rem 1rem;display:flex;align-items:center;gap:0.65rem;box-shadow:0 16px 40px rgba(0,0,0,0.5);font-size:0.78rem;font-weight:500;color:var(--white)}
+.float-dot{width:8px;height:8px;background:#4ADE80;border-radius:50%;box-shadow:0 0 8px rgba(74,222,128,0.5);animation:blink 2s infinite}
+.hero-visual{position:relative;padding-bottom:2rem}
 
-.hero-inner{
-  max-width:1300px;margin:0 auto;width:100%;
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:5rem;align-items:center;position:relative;z-index:2;
-}
+/* NUMBERS */
+.numbers{padding:4rem 2.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.numbers-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center}
+.num-val{font-family:var(--syne);font-size:2.5rem;font-weight:800;color:var(--white);letter-spacing:-0.03em;line-height:1}
+.num-val span{color:var(--orange)}
+.num-label{font-size:0.78rem;color:var(--gray);margin-top:0.4rem;letter-spacing:0.02em}
 
-.hero-eyebrow{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(0,229,255,0.08);
-  border:1px solid rgba(0,229,255,0.25);
-  padding:6px 16px;border-radius:100px;
-  font-size:0.72rem;font-weight:700;
-  color:var(--cyan);letter-spacing:0.1em;
-  text-transform:uppercase;margin-bottom:1.5rem;
-}
-.pulse{
-  width:6px;height:6px;border-radius:50%;
-  background:var(--lime);
-  animation:blink 1.5s infinite;
-}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+/* PAIN */
+.pain{padding:6rem 2.5rem;position:relative;overflow:hidden}
+.pain::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(255,92,0,0.05) 0%,transparent 70%);pointer-events:none}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-tag{font-size:0.7rem;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.85rem;display:flex;align-items:center;gap:0.5rem}
+.section-tag::before{content:'';width:20px;height:1px;background:var(--orange)}
+h2{font-family:var(--syne);font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1.06;letter-spacing:-0.03em;margin-bottom:1rem}
+h2 em{color:var(--orange);font-style:normal}
+.section-sub{font-size:1rem;color:var(--gray);max-width:520px;line-height:1.7;font-weight:300}
+.pain-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border-radius:16px;overflow:hidden;border:1px solid var(--border);margin-top:3.5rem}
+.pain-card{background:var(--ink2);padding:2rem;transition:background 0.25s}
+.pain-card:hover{background:var(--ink3)}
+.pain-icon{width:42px;height:42px;background:var(--orange-pale);border:1px solid rgba(255,92,0,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:1.1rem}
+.pain-title{font-family:var(--syne);font-size:1rem;font-weight:700;color:var(--white);margin-bottom:0.5rem;letter-spacing:-0.01em}
+.pain-text{font-size:0.85rem;color:var(--gray);line-height:1.65;font-weight:300}
+.pain-cost{display:inline-block;margin-top:0.85rem;font-size:0.75rem;color:var(--orange);background:var(--orange-pale);border:1px solid rgba(255,92,0,0.2);padding:4px 10px;border-radius:5px;font-weight:500}
+.pain-bridge{text-align:center;margin-top:3.5rem;padding:2.5rem;background:var(--ink2);border:1px solid var(--border);border-radius:16px;position:relative;overflow:hidden}
+.pain-bridge::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(255,92,0,0.08) 0%,transparent 70%)}
+.bridge-label{font-size:0.75rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem;position:relative}
+.bridge-text{font-family:var(--syne);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;color:var(--white);letter-spacing:-0.02em;line-height:1.15;position:relative}
+.bridge-text em{color:var(--orange);font-style:normal}
 
-.hero h1{
-  font-family:'Cabinet Grotesk',sans-serif;
-  font-size:clamp(3rem,5.5vw,5.5rem);
-  font-weight:900;line-height:0.95;
-  letter-spacing:-0.04em;
-  margin-bottom:1.5rem;
-}
-.h1-line2{
-  background:linear-gradient(135deg,var(--cyan) 0%,var(--magenta) 60%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  display:block;
-}
-.h1-line3{
-  background:linear-gradient(135deg,var(--lime) 0%,var(--cyan) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  display:block;
-}
+/* SOLUTION */
+.solution{padding:6rem 2.5rem;background:var(--ink2)}
+.products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3.5rem}
+.prod-card{border:1px solid var(--border);border-radius:14px;padding:1.75rem;background:var(--ink);transition:all 0.3s;position:relative;overflow:hidden}
+.prod-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 0% 0%,rgba(255,92,0,0.06) 0%,transparent 60%);opacity:0;transition:opacity 0.3s}
+.prod-card:hover{border-color:rgba(255,92,0,0.3);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.4)}
+.prod-card:hover::before{opacity:1}
+.prod-num{font-family:var(--syne);font-size:4rem;font-weight:800;color:rgba(255,255,255,0.04);line-height:1;margin-bottom:0.5rem;letter-spacing:-0.04em}
+.prod-icon{width:46px;height:46px;background:var(--orange-pale);border:1px solid rgba(255,92,0,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1rem}
+.prod-name{font-family:var(--syne);font-size:1.05rem;font-weight:700;color:var(--white);margin-bottom:0.5rem;letter-spacing:-0.01em}
+.prod-desc{font-size:0.82rem;color:var(--gray);line-height:1.65;margin-bottom:1.25rem;font-weight:300}
+.prod-features{list-style:none;display:flex;flex-direction:column;gap:0.55rem}
+.prod-features li{font-size:0.78rem;color:var(--gray);display:flex;align-items:flex-start;gap:0.6rem;line-height:1.5}
+.prod-features li::before{content:'—';color:var(--orange);font-weight:600;flex-shrink:0}
 
-.hero-desc{
-  font-size:1.05rem;color:var(--muted);
-  line-height:1.75;margin-bottom:2.5rem;
-  font-weight:400;max-width:480px;
-}
-.hero-desc strong{color:var(--white);font-weight:700}
+/* FOR WHO */
+.forwho{padding:6rem 2.5rem}
+.forwho-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start;margin-top:3.5rem}
+.profile-stack{display:flex;flex-direction:column;gap:1rem}
+.profile{display:flex;align-items:flex-start;gap:1rem;padding:1.25rem;border:1px solid var(--border);border-radius:12px;background:var(--ink2);transition:all 0.25s;cursor:default}
+.profile:hover{border-color:rgba(255,92,0,0.25);background:#161616}
+.profile-emoji{width:42px;height:42px;border-radius:10px;background:var(--ink3);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.profile-body strong{font-size:0.875rem;font-weight:600;color:var(--white);display:block;margin-bottom:0.25rem;letter-spacing:-0.01em}
+.profile-body span{font-size:0.78rem;color:var(--gray);line-height:1.55;font-weight:300}
+.nofor-box{background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:2rem}
+.nofor-head{font-family:var(--syne);font-size:0.9rem;font-weight:700;color:var(--white);margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border);letter-spacing:-0.01em}
+.nofor-item{font-size:0.82rem;color:var(--gray);display:flex;gap:0.6rem;align-items:flex-start;margin-bottom:0.85rem;line-height:1.55;font-weight:300}
+.nofor-x{color:var(--orange);flex-shrink:0;font-weight:600}
+.nofor-cta{margin-top:1.75rem;padding-top:1.75rem;border-top:1px solid var(--border)}
+.nofor-cta p{font-size:0.8rem;color:var(--gray);margin-bottom:0.85rem;font-weight:300}
 
-.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+/* ANCHOR */
+.anchor{padding:6rem 2.5rem;background:var(--ink2);position:relative;overflow:hidden}
+.anchor::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--orange),transparent)}
+.anchor-inner{max-width:1000px;margin:0 auto}
+.compare-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:16px;overflow:hidden;border:1px solid var(--border);margin:3.5rem 0}
+.compare-col{padding:2.25rem;background:var(--ink)}
+.compare-col.hot{background:#130800;border:1px solid rgba(255,92,0,0.2)}
+.compare-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray2);margin-bottom:1rem;font-weight:500}
+.compare-label.orange{color:var(--orange)}
+.compare-price{font-family:var(--syne);font-size:3.5rem;font-weight:800;color:var(--white);line-height:1;letter-spacing:-0.04em;margin-bottom:0.25rem}
+.compare-price.orange{color:var(--orange)}
+.compare-period{font-size:0.82rem;color:var(--gray);font-weight:300;margin-bottom:1.75rem}
+.compare-items{display:flex;flex-direction:column;gap:0.65rem}
+.ci{font-size:0.8rem;color:var(--gray);display:flex;gap:0.6rem;align-items:flex-start;line-height:1.5;font-weight:300}
+.ci.bad .ci-icon{color:var(--gray2)}
+.ci.good .ci-icon{color:var(--orange)}
+.anchor-cta{text-align:center}
 
-.btn-grad{
-  background:linear-gradient(135deg,var(--cyan),var(--magenta));
-  color:var(--bg);padding:15px 32px;border-radius:100px;
-  font-size:0.95rem;font-weight:800;text-decoration:none;
-  display:inline-flex;align-items:center;gap:8px;
-  transition:all 0.25s;box-shadow:0 0 40px rgba(0,229,255,0.2);
-}
-.btn-grad:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(0,229,255,0.35)}
+/* TESTIMONIALS */
+.testimonials{padding:6rem 2.5rem}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3.5rem}
+.testi{background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:1.75rem;transition:all 0.25s}
+.testi:hover{border-color:rgba(255,92,0,0.2);box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+.testi-stars{color:var(--orange);font-size:0.8rem;letter-spacing:3px;margin-bottom:1.1rem}
+.testi-quote{font-size:0.875rem;color:rgba(255,255,255,0.75);line-height:1.75;margin-bottom:1.5rem;font-weight:300}
+.testi-quote strong{color:var(--orange);font-weight:600}
+.testi-author{display:flex;align-items:center;gap:0.85rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+.testi-av{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;font-family:var(--syne);flex-shrink:0}
+.testi-name{font-size:0.82rem;font-weight:600;color:var(--white);letter-spacing:-0.01em}
+.testi-biz{font-size:0.72rem;color:var(--gray);font-weight:300}
+.guarantee-strip{margin-top:2.5rem;padding:1.5rem 2rem;background:rgba(255,92,0,0.06);border:1px solid rgba(255,92,0,0.15);border-radius:12px;display:flex;align-items:center;gap:1.25rem;font-size:0.875rem;color:rgba(255,255,255,0.75)}
+.guarantee-icon{font-size:1.5rem;flex-shrink:0}
+.guarantee-strip strong{color:var(--orange)}
 
-.btn-ghost{
-  background:transparent;color:var(--white);
-  padding:15px 32px;border-radius:100px;
-  font-size:0.95rem;font-weight:600;text-decoration:none;
-  border:1px solid rgba(255,255,255,0.15);
-  display:inline-flex;align-items:center;gap:8px;
-  transition:all 0.25s;
-}
-.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+/* PRICING */
+.pricing{padding:6rem 2.5rem;background:var(--ink2)}
+.urgency{display:inline-flex;align-items:center;gap:0.6rem;background:rgba(255,92,0,0.1);border:1px solid rgba(255,92,0,0.25);color:var(--orange);font-size:0.75rem;font-weight:600;padding:0.45rem 1rem;border-radius:100px;margin-bottom:3rem;letter-spacing:0.03em;text-transform:uppercase}
+.urgency-dot{width:6px;height:6px;background:var(--orange);border-radius:50%;animation:blink 1.5s infinite}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2.5rem}
+.plan{background:var(--ink);border:1px solid var(--border);border-radius:16px;padding:2rem;position:relative;transition:all 0.3s}
+.plan.featured{background:#0D0600;border-color:rgba(255,92,0,0.35);box-shadow:0 0 40px rgba(255,92,0,0.08)}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--orange);color:var(--white);font-size:0.68rem;font-weight:700;padding:0.3rem 1rem;border-radius:100px;white-space:nowrap;letter-spacing:0.05em;text-transform:uppercase}
+.plan-tier{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray);margin-bottom:0.5rem;font-weight:500}
+.plan-price{font-family:var(--syne);font-size:3.2rem;font-weight:800;color:var(--white);line-height:1;letter-spacing:-0.04em;margin-bottom:0.2rem}
+.plan-price.accent{color:var(--orange)}
+.plan-usd{font-size:0.78rem;color:var(--gray);font-weight:300;margin-bottom:0.85rem}
+.plan-desc{font-size:0.78rem;color:var(--gray);margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);line-height:1.55;font-weight:300}
+.plan-feats{list-style:none;display:flex;flex-direction:column;gap:0.6rem;margin-bottom:2rem}
+.plan-feats li{font-size:0.78rem;color:rgba(255,255,255,0.6);display:flex;gap:0.5rem;align-items:flex-start;line-height:1.5;font-weight:300}
+.plan-feats li::before{content:'✓';color:var(--orange);font-weight:700;flex-shrink:0}
+.plan-btn{display:block;text-align:center;padding:0.85rem;border-radius:8px;font-size:0.875rem;font-weight:600;letter-spacing:0.01em;transition:all 0.2s;font-family:var(--inter)}
+.plan-btn.main{background:var(--orange);color:var(--white)}
+.plan-btn.main:hover{background:var(--orange2);transform:translateY(-1px)}
+.plan-btn.ghost{border:1px solid var(--border2);color:var(--white)}
+.plan-btn.ghost:hover{border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04)}
+.plan-note{text-align:center;margin-top:2rem;font-size:0.78rem;color:var(--gray2);font-weight:300}
 
-/* ─── HERO VISUAL ─── */
-.hero-visual{position:relative}
+/* FAQ */
+.faq{padding:6rem 2.5rem}
+.faq-wrap{max-width:680px;margin:3.5rem auto 0}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{font-size:0.95rem;font-weight:500;color:var(--white);padding:1.35rem 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem;user-select:none;letter-spacing:-0.01em;transition:color 0.2s}
+.faq-q:hover{color:rgba(255,255,255,0.8)}
+.faq-toggle{width:24px;height:24px;border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--gray);flex-shrink:0;transition:all 0.25s}
+.faq-item.open .faq-toggle{background:var(--orange);border-color:var(--orange);color:var(--white);transform:rotate(45deg)}
+.faq-a{font-size:0.85rem;color:var(--gray);max-height:0;overflow:hidden;transition:max-height 0.35s ease,padding 0.2s;line-height:1.7;font-weight:300}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:1.35rem}
 
-.screen-wrap{
-  background:var(--surface);
-  border:1px solid rgba(0,229,255,0.15);
-  border-radius:24px;overflow:hidden;
-  box-shadow:0 0 0 1px rgba(0,229,255,0.05),
-             0 40px 80px rgba(0,0,0,0.7),
-             0 0 80px rgba(0,229,255,0.08);
-}
+/* FINAL CTA */
+.final{padding:7rem 2.5rem;position:relative;overflow:hidden;background:var(--ink)}
+.final-bg{position:absolute;inset:0;background:radial-gradient(ellipse 100% 80% at 50% 100%,rgba(255,92,0,0.12) 0%,transparent 70%)}
+.final-inner{max-width:680px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.final h2{font-family:var(--syne);font-size:clamp(2.5rem,5vw,3.8rem);font-weight:800;line-height:1.05;letter-spacing:-0.03em;margin-bottom:1.25rem}
+.final h2 em{color:var(--orange);font-style:normal}
+.final-sub{font-size:1rem;color:var(--gray);line-height:1.75;margin-bottom:2.75rem;font-weight:300}
+.final-actions{display:flex;flex-direction:column;align-items:center;gap:0.85rem;margin-bottom:2.5rem}
+.btn-final{display:flex;align-items:center;justify-content:center;gap:0.65rem;width:100%;max-width:400px;padding:1.1rem 2rem;border-radius:10px;font-weight:600;font-size:1rem;transition:all 0.25s;letter-spacing:0.01em}
+.btn-final.primary{background:var(--orange);color:var(--white);box-shadow:0 0 0 0 rgba(255,92,0,0.4)}
+.btn-final.primary:hover{background:var(--orange2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,92,0,0.3)}
+.btn-final.secondary{border:1px solid var(--border2);color:var(--white)}
+.btn-final.secondary:hover{border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04)}
+.final-meta{font-size:0.75rem;color:var(--gray2);display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap}
+.meta-sep{color:var(--border2)}
 
-.screen-bar{
-  background:var(--surface2);
-  padding:12px 20px;
-  display:flex;justify-content:space-between;align-items:center;
-  border-bottom:1px solid var(--border);
-}
-.screen-dots{display:flex;gap:6px}
-.dot{width:10px;height:10px;border-radius:50%}
-.dot1{background:#FF5F56}
-.dot2{background:#FFBD2E}
-.dot3{background:#27C93F}
-.screen-url{
-  font-size:0.7rem;color:var(--muted);
-  background:var(--bg);padding:4px 14px;border-radius:100px;
-  border:1px solid var(--border);
-}
+/* FOOTER */
+footer{padding:2rem 2.5rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+footer .logo{font-size:1.1rem}
+footer p{font-size:0.75rem;color:var(--gray2);font-weight:300}
 
-.screen-body{padding:16px}
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.65s cubic-bezier(0.16,1,0.3,1),transform 0.65s cubic-bezier(0.16,1,0.3,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal-d1{transition-delay:0.1s}
+.reveal-d2{transition-delay:0.2s}
 
-.pos-header-row{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:12px;
-}
-.pos-brand{
-  font-size:0.8rem;font-weight:900;letter-spacing:0.1em;
-  background:linear-gradient(135deg,var(--cyan),var(--magenta));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.pos-mesa-badge{
-  background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.25);
-  color:var(--cyan);font-size:0.65rem;font-weight:700;
-  padding:3px 10px;border-radius:100px;
-}
-
-.cats{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
-.cat{
-  padding:5px 14px;border-radius:100px;font-size:0.65rem;
-  font-weight:700;white-space:nowrap;
-}
-.cat.on{background:linear-gradient(135deg,var(--cyan),var(--magenta));color:var(--bg)}
-.cat.off{background:var(--surface2);color:var(--muted)}
-
-.prods{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
-.prod{
-  background:var(--surface2);border-radius:10px;
-  padding:10px;border:1px solid var(--border);
-  cursor:pointer;transition:border-color 0.2s;
-}
-.prod:hover{border-color:rgba(0,229,255,0.3)}
-.prod-n{font-size:0.65rem;font-weight:600;margin-bottom:4px;line-height:1.3}
-.prod-p{
-  font-size:0.7rem;font-weight:800;
-  background:linear-gradient(135deg,var(--cyan),var(--magenta));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-
-.total-row{
-  background:linear-gradient(135deg,rgba(0,229,255,0.08),rgba(255,45,120,0.08));
-  border:1px solid rgba(0,229,255,0.15);
-  border-radius:12px;padding:12px 16px;
-  display:flex;justify-content:space-between;align-items:center;
-}
-.total-l{font-size:0.7rem;color:var(--muted)}
-.total-amt{
-  font-size:1.1rem;font-weight:900;
-  background:linear-gradient(135deg,var(--cyan),var(--lime));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-
-/* FLOATING CARDS */
-.fc{
-  position:absolute;background:var(--surface);
-  border:1px solid rgba(0,229,255,0.2);border-radius:14px;
-  padding:10px 14px;font-size:0.72rem;font-weight:600;
-  box-shadow:0 8px 32px rgba(0,0,0,0.5);
-  display:flex;align-items:center;gap:8px;
-  animation:levitate 4s ease-in-out infinite;
-}
-.fc1{top:-30px;right:-10px;animation-delay:0s}
-.fc2{bottom:20px;left:-40px;animation-delay:2s}
-.fc3{top:45%;right:-50px;animation-delay:1s;font-size:0.68rem}
-@keyframes levitate{
-  0%,100%{transform:translateY(0px)}
-  50%{transform:translateY(-10px)}
-}
-.fc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.green{background:var(--lime)}
-.blue{background:var(--cyan)}
-.pink{background:var(--magenta)}
-
-/* ─── TICKER ─── */
-.ticker{
-  padding:16px 0;
-  background:linear-gradient(135deg,var(--cyan),var(--magenta));
-  overflow:hidden;white-space:nowrap;
-}
-.ticker-inner{
-  display:inline-flex;gap:0;
-  animation:tick 20s linear infinite;
-}
-.ticker-item{
-  font-size:0.8rem;font-weight:800;color:var(--bg);
-  padding:0 2rem;letter-spacing:0.05em;text-transform:uppercase;
-}
-.ticker-sep{color:rgba(5,5,10,0.4)}
-@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-/* ─── FEATURES ─── */
-.features{padding:100px 5%}
-.features-inner{max-width:1300px;margin:0 auto}
-
-.tag{
-  display:inline-block;font-size:0.68rem;font-weight:800;
-  letter-spacing:0.18em;text-transform:uppercase;
-  margin-bottom:1rem;
-}
-.tag.cyan{color:var(--cyan)}
-.tag.magenta{color:var(--magenta)}
-.tag.lime{color:var(--lime)}
-
-.section-h{
-  font-family:'Cabinet Grotesk',sans-serif;
-  font-size:clamp(2.2rem,4vw,3.5rem);
-  font-weight:900;letter-spacing:-0.03em;
-  line-height:1.05;margin-bottom:1rem;
-}
-
-.cards-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1.5rem;margin-top:3rem;
-}
-
-.feat-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:20px;padding:2rem;
-  position:relative;overflow:hidden;
-  transition:all 0.3s;
-}
-.feat-card::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:3px;
-  opacity:0;transition:opacity 0.3s;
-}
-.feat-card.c1::before{background:linear-gradient(90deg,var(--cyan),var(--magenta))}
-.feat-card.c2::before{background:linear-gradient(90deg,var(--magenta),var(--orange))}
-.feat-card.c3::before{background:linear-gradient(90deg,var(--lime),var(--cyan))}
-
-.feat-card:hover{
-  border-color:rgba(255,255,255,0.12);
-  transform:translateY(-6px);
-}
-.feat-card:hover::before{opacity:1}
-
-.feat-num{
-  font-size:3rem;font-weight:900;opacity:0.06;
-  position:absolute;top:1rem;right:1.5rem;
-  font-family:'Cabinet Grotesk',sans-serif;
-  letter-spacing:-0.05em;
-}
-
-.feat-icon{
-  width:56px;height:56px;border-radius:16px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.5rem;margin-bottom:1.5rem;
-}
-.feat-icon.i1{background:rgba(0,229,255,0.1)}
-.feat-icon.i2{background:rgba(255,45,120,0.1)}
-.feat-icon.i3{background:rgba(186,255,57,0.1)}
-
-.feat-title{
-  font-size:1.25rem;font-weight:800;
-  letter-spacing:-0.02em;margin-bottom:0.75rem;
-}
-.feat-desc{
-  font-size:0.85rem;color:var(--muted);
-  line-height:1.7;margin-bottom:1.5rem;
-}
-.feat-list{list-style:none;display:flex;flex-direction:column;gap:7px}
-.feat-list li{
-  font-size:0.8rem;color:#aaa;
-  display:flex;align-items:flex-start;gap:8px;
-}
-.feat-list li::before{
-  content:'→';font-size:0.7rem;
-  margin-top:2px;flex-shrink:0;
-}
-.feat-card.c1 .feat-list li::before{color:var(--cyan)}
-.feat-card.c2 .feat-list li::before{color:var(--magenta)}
-.feat-card.c3 .feat-list li::before{color:var(--lime)}
-
-/* ─── BOT SECTION ─── */
-.bot-sec{
-  padding:100px 5%;
-  background:var(--surface);
-  position:relative;overflow:hidden;
-}
-.bot-sec::before{
-  content:'';position:absolute;
-  top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--magenta),transparent);
-}
-.bot-sec::after{
-  content:'';position:absolute;
-  bottom:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
-}
-
-.bot-inner{
-  max-width:1300px;margin:0 auto;
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:5rem;align-items:center;
-}
-
-.bot-chat{
-  background:var(--bg);
-  border:1px solid rgba(255,45,120,0.2);
-  border-radius:24px;overflow:hidden;
-  box-shadow:0 0 60px rgba(255,45,120,0.08);
-}
-.wh-bar{
-  background:#1F2C34;
-  padding:14px 18px;
-  display:flex;align-items:center;gap:12px;
-}
-.wh-ava{
-  width:38px;height:38px;border-radius:50%;
-  background:linear-gradient(135deg,var(--cyan),var(--magenta));
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;flex-shrink:0;
-}
-.wh-name{font-size:0.88rem;font-weight:700}
-.wh-status{font-size:0.65rem;color:#67C15E}
-
-.msgs{
-  padding:16px;background:#0D1117;
-  display:flex;flex-direction:column;gap:10px;
-  min-height:320px;
-}
-.m{
-  max-width:82%;padding:9px 13px;
-  border-radius:12px;font-size:0.78rem;line-height:1.55;
-}
-.m.b{
-  background:#1A2733;
-  border:1px solid rgba(255,255,255,0.04);
-  align-self:flex-start;border-bottom-left-radius:3px;
-}
-.m.u{
-  background:linear-gradient(135deg,rgba(0,229,255,0.15),rgba(255,45,120,0.15));
-  border:1px solid rgba(0,229,255,0.1);
-  align-self:flex-end;border-bottom-right-radius:3px;
-  color:var(--white);
-}
-.m-t{font-size:0.6rem;color:var(--muted);margin-top:2px}
-.hi{color:var(--cyan);font-weight:700}
-.hm{color:var(--magenta);font-weight:700}
-.hl{color:var(--lime);font-weight:700}
-
-/* ─── STATS ─── */
-.stats-sec{
-  padding:80px 5%;
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-}
-.stats-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:2rem;max-width:1000px;margin:0 auto;text-align:center;
-}
-.stat-n{
-  font-size:3rem;font-weight:900;line-height:1;margin-bottom:8px;
-  font-family:'Cabinet Grotesk',sans-serif;letter-spacing:-0.03em;
-}
-.s1{background:linear-gradient(135deg,var(--cyan),var(--lime));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.s2{background:linear-gradient(135deg,var(--magenta),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.s3{background:linear-gradient(135deg,var(--lime),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.s4{background:linear-gradient(135deg,var(--orange),var(--magenta));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.stat-l{font-size:0.78rem;color:var(--muted);font-weight:500}
-
-/* ─── PRECIOS ─── */
-.pricing{padding:100px 5%}
-.pricing-inner{max-width:1100px;margin:0 auto}
-
-.plans{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:1.5rem;margin-top:3rem;
-}
-.plan{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:24px;padding:2rem;
-  position:relative;transition:all 0.3s;
-}
-.plan:hover{transform:translateY(-6px)}
-
-.plan.hot{
-  background:linear-gradient(145deg,var(--surface) 0%,rgba(0,229,255,0.04) 100%);
-  border:1px solid rgba(0,229,255,0.25);
-  box-shadow:0 0 60px rgba(0,229,255,0.07);
-}
-.hot-badge{
-  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
-  background:linear-gradient(135deg,var(--cyan),var(--magenta));
-  color:var(--bg);font-size:0.62rem;font-weight:800;
-  padding:4px 18px;border-radius:100px;white-space:nowrap;
-  letter-spacing:0.08em;text-transform:uppercase;
-}
-
-.plan-tier{
-  font-size:0.65rem;font-weight:800;letter-spacing:0.18em;
-  text-transform:uppercase;color:var(--muted);margin-bottom:1rem;
-}
-.plan-usd{
-  font-size:3.5rem;font-weight:900;line-height:1;margin-bottom:4px;
-  font-family:'Cabinet Grotesk',sans-serif;letter-spacing:-0.04em;
-}
-.plan.hot .plan-usd{
-  background:linear-gradient(135deg,var(--cyan),var(--magenta));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.plan-per{font-size:0.78rem;color:var(--muted);margin-bottom:1.5rem}
-
-.plan-feats{
-  list-style:none;display:flex;flex-direction:column;
-  gap:9px;margin-bottom:2rem;
-}
-.plan-feats li{
-  font-size:0.82rem;display:flex;align-items:flex-start;gap:8px;
-}
-.plan-feats li.y{color:var(--white)}
-.plan-feats li.y::before{content:'✓';color:var(--lime);flex-shrink:0}
-.plan-feats li.n{color:#333}
-.plan-feats li.n::before{content:'–';color:#2A2A2A;flex-shrink:0}
-
-.plan-btn{
-  display:block;text-align:center;padding:13px;
-  border-radius:100px;font-size:0.88rem;font-weight:800;
-  text-decoration:none;transition:all 0.2s;letter-spacing:0.02em;
-}
-.plan-btn.outline{
-  border:1px solid rgba(255,255,255,0.12);color:var(--white);
-}
-.plan-btn.outline:hover{border-color:var(--cyan);color:var(--cyan)}
-.plan-btn.filled{
-  background:linear-gradient(135deg,var(--cyan),var(--magenta));
-  color:var(--bg);box-shadow:0 0 30px rgba(0,229,255,0.2);
-}
-.plan-btn.filled:hover{box-shadow:0 0 50px rgba(0,229,255,0.35);transform:translateY(-2px)}
-
-/* ─── PAISES ─── */
-.paises{padding:80px 5%;text-align:center;background:var(--surface)}
-.paises-row{
-  display:flex;justify-content:center;gap:2rem;
-  margin-top:3rem;flex-wrap:wrap;
-}
-.pais{
-  background:var(--surface2);
-  border:1px solid var(--border);
-  border-radius:20px;padding:2rem 3rem;
-  transition:all 0.3s;
-}
-.pais:hover{transform:translateY(-4px);border-color:rgba(0,229,255,0.2)}
-.pais-flag{font-size:3rem;margin-bottom:10px}
-.pais-name{
-  font-size:1.2rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:10px;
-}
-.pais-pays{font-size:0.78rem;color:var(--muted);line-height:1.8}
-
-/* ─── TESTIMONIAL ─── */
-.testi{
-  padding:100px 5%;text-align:center;
-  position:relative;overflow:hidden;
-}
-.testi::before{
-  content:'';position:absolute;
-  top:50%;left:50%;transform:translate(-50%,-50%);
-  width:800px;height:400px;
-  background:radial-gradient(ellipse,rgba(0,229,255,0.05) 0%,transparent 70%);
-}
-.testi-quote{
-  font-size:clamp(1.4rem,3.5vw,2.4rem);
-  font-weight:800;line-height:1.35;
-  letter-spacing:-0.02em;
-  max-width:900px;margin:0 auto 2rem;
-  position:relative;
-}
-.testi-quote em{
-  font-style:normal;
-  background:linear-gradient(135deg,var(--cyan),var(--magenta));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.testi-who{
-  display:flex;align-items:center;justify-content:center;gap:14px;
-}
-.testi-ava{
-  width:48px;height:48px;border-radius:50%;
-  background:linear-gradient(135deg,var(--cyan),var(--magenta));
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.3rem;
-}
-.testi-n{font-size:0.95rem;font-weight:800;letter-spacing:-0.01em}
-.testi-r{font-size:0.75rem;color:var(--muted)}
-
-/* ─── CTA ─── */
-.cta{
-  padding:120px 5%;text-align:center;
-  background:var(--surface);position:relative;overflow:hidden;
-}
-.cta::before{
-  content:'';position:absolute;
-  top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
-}
-.cta-blob{
-  position:absolute;width:700px;height:700px;
-  border-radius:50%;
-  top:50%;left:50%;transform:translate(-50%,-50%);
-  background:radial-gradient(circle,rgba(0,229,255,0.06) 0%,rgba(255,45,120,0.04) 50%,transparent 70%);
-  pointer-events:none;
-}
-.cta h2{
-  font-size:clamp(2.5rem,6vw,5rem);
-  font-weight:900;letter-spacing:-0.04em;
-  line-height:0.95;margin-bottom:1.5rem;
-  position:relative;
-}
-.cta h2 span{
-  background:linear-gradient(135deg,var(--cyan),var(--magenta),var(--lime));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.cta p{
-  font-size:1.05rem;color:var(--muted);
-  margin-bottom:3rem;position:relative;
-}
-.cta-row{
-  display:flex;gap:16px;justify-content:center;
-  flex-wrap:wrap;position:relative;
-}
-
-.btn-wa{
-  background:#25D366;color:white;
-  padding:16px 36px;border-radius:100px;
-  font-size:0.95rem;font-weight:800;text-decoration:none;
-  display:inline-flex;align-items:center;gap:10px;
-  transition:all 0.25s;box-shadow:0 0 40px rgba(37,211,102,0.2);
-}
-.btn-wa:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(37,211,102,0.35)}
-
-.btn-tg{
-  background:#229ED9;color:white;
-  padding:16px 36px;border-radius:100px;
-  font-size:0.95rem;font-weight:800;text-decoration:none;
-  display:inline-flex;align-items:center;gap:10px;
-  transition:all 0.25s;box-shadow:0 0 40px rgba(34,158,217,0.2);
-}
-.btn-tg:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(34,158,217,0.35)}
-
-/* ─── FOOTER ─── */
-footer{
-  padding:40px 5%;
-  border-top:1px solid var(--border);
-  display:flex;justify-content:space-between;
-  align-items:center;flex-wrap:wrap;gap:1rem;
-}
-.f-logo{font-weight:900;font-size:1.1rem;letter-spacing:-0.03em}
-.f-logo span{
-  background:linear-gradient(135deg,var(--cyan),var(--magenta));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-footer p{font-size:0.75rem;color:var(--muted)}
-
-/* ─── RESPONSIVE ─── */
+/* RESPONSIVE */
 @media(max-width:900px){
-  .hero-inner,.bot-inner{grid-template-columns:1fr}
-  .hero-visual,.bot-visual-side{display:none}
-  .cards-grid,.plans,.stats-grid{grid-template-columns:1fr}
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .hero-inner,.forwho-grid{grid-template-columns:1fr}
+  .hero-visual{display:none}
+  .products-grid,.testi-grid,.plans{grid-template-columns:1fr}
+  .pain-grid,.compare-wrap{grid-template-columns:1fr}
+  .numbers-inner{grid-template-columns:repeat(2,1fr)}
+  nav{padding:1rem 1.25rem}
   .nav-links{display:none}
+  .hero,.pain,.solution,.forwho,.anchor,.testimonials,.pricing,.faq,.final{padding-left:1.25rem;padding-right:1.25rem}
 }
-
-/* ─── FADE IN ─── */
-.fi{opacity:0;transform:translateY(40px);transition:opacity 0.7s ease,transform 0.7s ease}
-.fi.v{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body>
 
-<div class="cursor" id="cur"></div>
-
 <!-- NAV -->
 <nav>
-  <div class="logo">Mesa<span>POS</span></div>
+  <a href="#" class="logo">Mesa<span>POS</span></a>
   <div class="nav-links">
-    <a href="#productos">Productos</a>
-    <a href="#precios">Precios</a>
-    <a href="#contacto">Contacto</a>
+    <a href="#solution">Productos</a>
+    <a href="#pricing">Precios</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://wa.me/56964629963?text=Hola,%20quiero%20una%20demo%20de%20MesaPOS" class="nav-cta">Demo gratis →</a>
   </div>
-  <a href="https://wa.me/56964629963?text=Hola,%20quiero%20info%20sobre%20MesaPOS" class="nav-cta" target="_blank">Solicitar demo →</a>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="blob blob1"></div>
-  <div class="blob blob2"></div>
-  <div class="blob blob3"></div>
-
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
   <div class="hero-inner">
     <div>
-      <div class="hero-eyebrow"><span class="pulse"></span>Sistema digital para restaurantes</div>
-      <h1>
-        Tu restaurante<br>
-        <span class="h1-line2">en modo</span>
-        <span class="h1-line3">digital.</span>
-      </h1>
-      <p class="hero-desc">
-        <strong>POS web + Bot WhatsApp + Menú QR.</strong><br>
-        Todo integrado, sin instalaciones complicadas, funcionando en 24 horas. Para Chile y Venezuela.
-      </p>
-      <div class="hero-btns">
-        <a href="https://wa.me/56964629963?text=Hola,%20quiero%20una%20demo%20de%20MesaPOS" class="btn-grad" target="_blank">
-          💬 Hablar ahora
-        </a>
-        <a href="#precios" class="btn-ghost">Ver planes →</a>
+      <div class="hero-eyebrow"><span class="eyebrow-dot"></span>Sistema activo · Chile & Venezuela</div>
+      <h1>Tu restaurante <span class="highlight">pierde plata</span> <span class="underline-word">ahora mismo.</span></h1>
+      <p class="hero-desc">Pedidos mal anotados. WhatsApp sin respuesta. Cierres de caja sin números reales. <strong>MesaPOS resuelve todo eso en 24 horas, sin técnicos, sin instalar nada.</strong></p>
+      <div class="hero-actions">
+        <a href="https://wa.me/56964629963?text=Hola,%20quiero%20una%20demo%20gratuita%20de%20MesaPOS" class="btn-orange">💬 Ver demo gratis — 15 min</a>
+        <a href="#pricing" class="btn-outline">Ver planes y precios →</a>
+      </div>
+      <div class="hero-trust">
+        <span class="trust-item"><span class="trust-check">✓</span> Desde $19.900 CLP/mes</span>
+        <span class="trust-sep"></span>
+        <span class="trust-item"><span class="trust-check">✓</span> Activo en 24 horas</span>
+        <span class="trust-sep"></span>
+        <span class="trust-item"><span class="trust-check">✓</span> Sin permanencia</span>
+        <span class="trust-sep"></span>
+        <span class="trust-item"><span class="trust-check">✓</span> Garantía 7 días</span>
       </div>
     </div>
-
     <div class="hero-visual">
-      <div class="screen-wrap">
-        <div class="screen-bar">
-          <div class="screen-dots">
-            <div class="dot dot1"></div>
-            <div class="dot dot2"></div>
-            <div class="dot dot3"></div>
+      <div class="pos-screen">
+        <div class="pos-topbar">
+          <div class="pos-dots">
+            <div class="pos-dot" style="background:#FF5F57"></div>
+            <div class="pos-dot" style="background:#FEBC2E"></div>
+            <div class="pos-dot" style="background:#28C840"></div>
           </div>
-          <div class="screen-url">mesapos.app/caja</div>
-          <div></div>
+          <div class="pos-title">mesapos.app/caja · Turno 2</div>
         </div>
-        <div class="screen-body">
-          <div class="pos-header-row">
-            <span class="pos-brand">MESAPOS</span>
-            <span class="pos-mesa-badge">Mesa 4 · 3 pax</span>
+        <div class="pos-body">
+          <div class="pos-row">
+            <div class="pos-card">
+              <div class="pos-clabel">Ventas hoy</div>
+              <div class="pos-cval orange">$247.500</div>
+              <div class="pos-badge badge-up">↑ +18% vs ayer</div>
+            </div>
+            <div class="pos-card">
+              <div class="pos-clabel">Mesas activas</div>
+              <div class="pos-cval">7 / 12</div>
+              <div class="pos-badge badge-warn">3 esperando</div>
+            </div>
           </div>
-          <div class="cats">
-            <div class="cat on">Combos</div>
-            <div class="cat off">Burgers</div>
-            <div class="cat off">Bebidas</div>
-            <div class="cat off">Postres</div>
-          </div>
-          <div class="prods">
-            <div class="prod"><div class="prod-n">Combo Clásico</div><div class="prod-p">$8.500</div></div>
-            <div class="prod"><div class="prod-n">Combo Especial</div><div class="prod-p">$12.000</div></div>
-            <div class="prod"><div class="prod-n">½ Pollo Brasa</div><div class="prod-p">$15.500</div></div>
-            <div class="prod"><div class="prod-n">Burger BBQ</div><div class="prod-p">$9.990</div></div>
-            <div class="prod"><div class="prod-n">Arepa Mixta</div><div class="prod-p">$6.500</div></div>
-            <div class="prod"><div class="prod-n">Full Familiar</div><div class="prod-p">$27.500</div></div>
-          </div>
-          <div class="total-row">
-            <div><div class="total-l">3 items · Efectivo</div></div>
-            <div class="total-amt">$37.990</div>
+          <div class="pos-list">
+            <div class="pos-list-title">Comandas en curso</div>
+            <div class="pos-order">
+              <span class="pos-oname">Mesa 4 · Combo Especial x2</span>
+              <span class="pos-ostatus s-done">Listo ✓</span>
+              <span class="pos-oprice">$24.000</span>
+            </div>
+            <div class="pos-order">
+              <span class="pos-oname">WhatsApp · Delivery arroz</span>
+              <span class="pos-ostatus s-bot">Bot 🤖</span>
+              <span class="pos-oprice">$12.500</span>
+            </div>
+            <div class="pos-order">
+              <span class="pos-oname">Mesa 7 · Burger BBQ x3</span>
+              <span class="pos-ostatus s-new">Nuevo</span>
+              <span class="pos-oprice">$29.970</span>
+            </div>
           </div>
         </div>
       </div>
-      <div class="fc fc1"><span class="fc-dot green"></span>Comanda #058 ✓</div>
-      <div class="fc fc2"><span class="fc-dot blue"></span>🤖 Bot: 5 pedidos hoy</div>
-      <div class="fc fc3"><span class="fc-dot pink"></span>Turno 2 abierto</div>
+      <div class="float-pill"><span class="float-dot"></span>Bot tomó 8 pedidos hoy sin ti</div>
     </div>
   </div>
 </section>
 
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-inner">
-    <span class="ticker-item">POS Web ✦</span>
-    <span class="ticker-item">Bot WhatsApp ✦</span>
-    <span class="ticker-item">Menú QR ✦</span>
-    <span class="ticker-item">Sin instalación ✦</span>
-    <span class="ticker-item">Chile & Venezuela ✦</span>
-    <span class="ticker-item">Desde $15 USD/mes ✦</span>
-    <span class="ticker-item">24 horas para activar ✦</span>
-    <span class="ticker-item">POS Web ✦</span>
-    <span class="ticker-item">Bot WhatsApp ✦</span>
-    <span class="ticker-item">Menú QR ✦</span>
-    <span class="ticker-item">Sin instalación ✦</span>
-    <span class="ticker-item">Chile & Venezuela ✦</span>
-    <span class="ticker-item">Desde $15 USD/mes ✦</span>
-    <span class="ticker-item">24 horas para activar ✦</span>
+<!-- NUMBERS -->
+<section class="numbers">
+  <div class="numbers-inner">
+    <div class="reveal">
+      <div class="num-val">24<span>h</span></div>
+      <div class="num-label">Para estar operativo</div>
+    </div>
+    <div class="reveal reveal-d1">
+      <div class="num-val"><span>3</span> en 1</div>
+      <div class="num-label">POS · Bot · Menú QR</div>
+    </div>
+    <div class="reveal reveal-d1">
+      <div class="num-val">$<span>0</span></div>
+      <div class="num-label">Costo de instalación</div>
+    </div>
+    <div class="reveal reveal-d2">
+      <div class="num-val">24<span>/7</span></div>
+      <div class="num-label">Bot tomando pedidos</div>
+    </div>
   </div>
-</div>
+</section>
 
-<!-- STATS -->
-<div class="stats-sec">
-  <div class="stats-grid">
-    <div class="fi"><div class="stat-n s1">24h</div><div class="stat-l">Para estar operativo</div></div>
-    <div class="fi"><div class="stat-n s2">3</div><div class="stat-l">Herramientas en 1</div></div>
-    <div class="fi"><div class="stat-n s3">$0</div><div class="stat-l">Costo de instalación</div></div>
-    <div class="fi"><div class="stat-n s4">24/7</div><div class="stat-l">Bot tomando pedidos</div></div>
+<!-- PAIN -->
+<section class="pain">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-tag">El problema real</div>
+      <h2>¿Cuánto pierdes<br/>cada semana por <em>esto?</em></h2>
+      <p class="section-sub">Estos son los problemas reales que enfrentan restaurantes que operan sin sistema digital.</p>
+    </div>
+    <div class="pain-grid reveal">
+      <div class="pain-card">
+        <div class="pain-icon">📝</div>
+        <div class="pain-title">Pedidos mal anotados</div>
+        <div class="pain-text">El garçon anota mal, el cliente se molesta, pierdes la mesa y la propina. Pasa todos los días y nunca aparece en tus números.</div>
+        <div class="pain-cost">Costo invisible: reputación + propinas</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">📱</div>
+        <div class="pain-title">WhatsApp sin respuesta en la noche</div>
+        <div class="pain-text">Un cliente escribe a las 11pm preguntando por delivery. No hay nadie. El pedido se va a la competencia — sin que te enteres.</div>
+        <div class="pain-cost">Costo visible: pedidos perdidos todos los días</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">📊</div>
+        <div class="pain-title">Cierres de caja sin control</div>
+        <div class="pain-text">No sabes cuánto vendiste realmente, qué plato fue el más pedido, ni si tu turno de noche es rentable o te está costando.</div>
+        <div class="pain-cost">Costo silencioso: decisiones sin datos</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">⏳</div>
+        <div class="pain-title">Cola en caja y clientes impacientes</div>
+        <div class="pain-text">Clientes esperando para pagar mientras buscas la calculadora. Esa experiencia mala no vuelve y se lo cuenta a tres personas.</div>
+        <div class="pain-cost">Costo a largo plazo: clientes que no regresan</div>
+      </div>
+    </div>
+    <div class="pain-bridge reveal">
+      <p class="bridge-label">La solución no es contratar más personal</p>
+      <div class="bridge-text">Es <em>digitalizar</em> lo que ya tienes.<br/>En 24 horas. Sin técnicos.</div>
+    </div>
   </div>
-</div>
+</section>
 
-<!-- FEATURES -->
-<section class="features" id="productos">
-  <div class="features-inner">
-    <div class="tag cyan fi">Lo que incluye</div>
-    <h2 class="section-h fi">Tres herramientas.<br>Un ecosistema.</h2>
-    <div class="cards-grid">
-      <div class="feat-card c1 fi">
-        <div class="feat-num">01</div>
-        <div class="feat-icon i1">🖥️</div>
-        <div class="feat-title">POS Web</div>
-        <p class="feat-desc">Sistema de caja 100% desde el navegador. Sin instalaciones, funciona en cualquier dispositivo con Chrome.</p>
-        <ul class="feat-list">
-          <li>Gestión de mesas y comandas</li>
+<!-- SOLUTION -->
+<section class="solution" id="solution">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-tag">Cómo funciona</div>
+      <h2>Tres herramientas.<br/><em>Un ecosistema.</em></h2>
+      <p class="section-sub">Todo conectado. Lo que entra por WhatsApp aparece en la caja. Lo que cambias en el menú se actualiza en el QR al instante.</p>
+    </div>
+    <div class="products-grid">
+      <div class="prod-card reveal">
+        <div class="prod-num">01</div>
+        <div class="prod-icon">🖥️</div>
+        <div class="prod-name">POS Web</div>
+        <div class="prod-desc">Sistema de caja completo en el navegador. Sin instalar nada. Funciona en cualquier PC, tablet o celular con Chrome.</div>
+        <ul class="prod-features">
+          <li>Gestión de mesas y comandas en tiempo real</li>
           <li>Impresión de tickets 80mm</li>
           <li>PDA inalámbrica para garzones</li>
           <li>Múltiples métodos de pago</li>
-          <li>Apertura y cierre por turno</li>
-          <li>Reportes en tiempo real</li>
+          <li>Apertura y cierre de turno</li>
+          <li>Reportes de ventas del día</li>
         </ul>
       </div>
-      <div class="feat-card c2 fi">
-        <div class="feat-num">02</div>
-        <div class="feat-icon i2">🤖</div>
-        <div class="feat-title">Bot WhatsApp</div>
-        <p class="feat-desc">Un vendedor automático 24/7. Toma pedidos, calcula totales, gestiona delivery y cobra sin que hagas nada.</p>
-        <ul class="feat-list">
+      <div class="prod-card reveal reveal-d1">
+        <div class="prod-num">02</div>
+        <div class="prod-icon">🤖</div>
+        <div class="prod-name">Bot WhatsApp</div>
+        <div class="prod-desc">Un vendedor que trabaja 24/7 sin sueldo. Toma pedidos, calcula el total, gestiona delivery y confirma — solo.</div>
+        <ul class="prod-features">
           <li>Atiende múltiples clientes a la vez</li>
-          <li>Muestra menú con precios</li>
-          <li>Gestiona delivery y retiro</li>
+          <li>Menú actualizado en tiempo real</li>
+          <li>Gestiona delivery y retiro en tienda</li>
           <li>Cobra transferencia o efectivo</li>
           <li>Confirma el pedido automáticamente</li>
-          <li>Conectado a tu base de datos</li>
+          <li>Funciona desde tu número actual</li>
         </ul>
       </div>
-      <div class="feat-card c3 fi">
-        <div class="feat-num">03</div>
-        <div class="feat-icon i3">📱</div>
-        <div class="feat-title">Menú Digital QR</div>
-        <p class="feat-desc">Tu carta digital que el cliente escanea en la mesa. Siempre actualizada, sin papel, sin app que descargar.</p>
-        <ul class="feat-list">
-          <li>Código QR por mesa</li>
-          <li>Actualización instantánea</li>
-          <li>Sin app ni descarga</li>
+      <div class="prod-card reveal reveal-d2">
+        <div class="prod-num">03</div>
+        <div class="prod-icon">📱</div>
+        <div class="prod-name">Menú QR</div>
+        <div class="prod-desc">Tu carta digital que el cliente escanea en la mesa. Sin papel. Sin app que descargar. Siempre actualizada.</div>
+        <ul class="prod-features">
+          <li>Código QR único por mesa</li>
+          <li>Actualización instantánea desde el sistema</li>
           <li>Fotos y descripción de platos</li>
-          <li>Permite hacer pedidos</li>
+          <li>Permite hacer pedidos directamente</li>
           <li>Funciona en cualquier celular</li>
+          <li>Sin descarga ni registro del cliente</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- BOT SECTION -->
-<section class="bot-sec">
-  <div class="bot-inner">
-    <div class="bot-chat fi">
-      <div class="wh-bar">
-        <div class="wh-ava">🍽️</div>
-        <div>
-          <div class="wh-name">Tu Restaurante</div>
-          <div class="wh-status">● en línea</div>
-        </div>
-      </div>
-      <div class="msgs">
-        <div><div class="m u">Hola buenas tardes</div></div>
-        <div><div class="m b">¡Hola! 👋 Bienvenido. ¿Qué te apetece hoy? Tenemos <span class="hi">pollo a la brasa</span>, burgers, arepas y mucho más.</div></div>
-        <div><div class="m u">Un arroz especial porfa, delivery</div></div>
-        <div><div class="m b"><span class="hm">Arroz Especial Cerdo-Camarón</span> = $10.000<br>+ Delivery $2.500<br><span class="hl">Total: $12.500 ✓</span><br><br>¿Cuál es tu dirección?</div></div>
-        <div><div class="m u">Barros Arana 2450</div></div>
-        <div><div class="m b">🎉 <strong>Pedido confirmado.</strong> El repartidor te llama cuando salga.<br><br>¡Gracias por tu compra! 🙌</div></div>
-      </div>
+<!-- FOR WHO -->
+<section class="forwho">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-tag">¿Es para ti?</div>
+      <h2>MesaPOS es para ti<br/>si te identificas <em>aquí.</em></h2>
     </div>
-
-    <div class="fi">
-      <div class="tag magenta">El diferenciador</div>
-      <h2 class="section-h">El bot<br>vende solo.</h2>
-      <p style="color:var(--muted);font-size:1rem;line-height:1.75;margin-bottom:2rem;font-weight:400">
-        Un cliente escribe, el bot lo atiende, toma el pedido, gestiona el pago y confirma — sin que tú hagas absolutamente nada.
-      </p>
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div style="display:flex;align-items:center;gap:12px;font-size:0.88rem;color:#ccc">
-          <span style="color:var(--lime);font-size:1.2rem">✓</span> Atiende múltiples clientes al mismo tiempo
+    <div class="forwho-grid">
+      <div class="profile-stack reveal">
+        <div class="profile">
+          <div class="profile-emoji">🍽️</div>
+          <div class="profile-body">
+            <strong>Restaurante con mesas y garzones</strong>
+            <span>Quieres que los pedidos lleguen directo a cocina y controlar cada mesa sin depender de papel.</span>
+          </div>
         </div>
-        <div style="display:flex;align-items:center;gap:12px;font-size:0.88rem;color:#ccc">
-          <span style="color:var(--lime);font-size:1.2rem">✓</span> Funciona las 24 horas, nunca se cansa
+        <div class="profile">
+          <div class="profile-emoji">🛵</div>
+          <div class="profile-body">
+            <strong>Negocio con delivery por WhatsApp</strong>
+            <span>Recibes pedidos manualmente y quieres automatizarlo para atender más sin contratar más personal.</span>
+          </div>
         </div>
-        <div style="display:flex;align-items:center;gap:12px;font-size:0.88rem;color:#ccc">
-          <span style="color:var(--lime);font-size:1.2rem">✓</span> Cobra por transferencia o efectivo
+        <div class="profile">
+          <div class="profile-emoji">☕</div>
+          <div class="profile-body">
+            <strong>Cafetería o food court</strong>
+            <span>Tienes volumen de clientes, necesitas rapidez en caja y quieres números reales al cerrar el día.</span>
+          </div>
         </div>
-        <div style="display:flex;align-items:center;gap:12px;font-size:0.88rem;color:#ccc">
-          <span style="color:var(--lime);font-size:1.2rem">✓</span> Conectado en tiempo real con tu menú
+        <div class="profile">
+          <div class="profile-emoji">📈</div>
+          <div class="profile-body">
+            <strong>Dueño que quiere controlar sin estar presente</strong>
+            <span>Necesitas ver en tiempo real qué se vende y cómo va el turno — desde donde estés.</span>
+          </div>
         </div>
-        <div style="display:flex;align-items:center;gap:12px;font-size:0.88rem;color:#ccc">
-          <span style="color:var(--lime);font-size:1.2rem">✓</span> Reduce errores y ahorra horas de trabajo
+      </div>
+      <div class="reveal reveal-d1">
+        <div class="nofor-box">
+          <div class="nofor-head">🚫 No es para ti si...</div>
+          <div class="nofor-item"><span class="nofor-x">×</span>Tus precios cambian todos los días sin ningún patrón fijo.</div>
+          <div class="nofor-item"><span class="nofor-x">×</span>Buscas sistema corporativo para cadena multinacional.</div>
+          <div class="nofor-item"><span class="nofor-x">×</span>Tu local no tiene acceso a internet — el sistema lo requiere.</div>
+          <div class="nofor-cta">
+            <p>¿No estás seguro si aplica a tu negocio? Escríbenos y te respondemos en 5 minutos.</p>
+            <a href="https://wa.me/56964629963?text=Hola,%20quiero%20saber%20si%20MesaPOS%20aplica%20para%20mi%20negocio" class="btn-orange" style="display:inline-flex;font-size:0.85rem;padding:0.7rem 1.25rem">Consultar gratis →</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRECIOS -->
-<section class="pricing" id="precios">
-  <div class="pricing-inner">
-    <div style="text-align:center;margin-bottom:1rem">
-      <div class="tag lime fi" style="display:inline-block">Planes</div>
+<!-- ANCHOR -->
+<section class="anchor">
+  <div class="anchor-inner">
+    <div class="reveal">
+      <div class="section-tag">El cálculo real</div>
+      <h2>Fudo cobra $34.500/mes.<br/>MesaPOS Pro vale <em>$29.900</em><br/>— con bot incluido.</h2>
+      <p class="section-sub" style="margin-top:0.75rem">Mismas funciones esenciales. Precio menor. Y encima tienes el bot de WhatsApp que Fudo cobra aparte.</p>
     </div>
-    <h2 class="section-h fi" style="text-align:center;max-width:100%">Precio fijo.<br>Sin sorpresas.</h2>
-    <p class="fi" style="text-align:center;color:var(--muted);font-size:1rem;margin-top:0.5rem">En USD. Funciona para Chile y Venezuela. Sin permanencia mínima.</p>
+    <div class="compare-wrap reveal">
+      <div class="compare-col">
+        <div class="compare-label">Fudo Avanzado — el líder del mercado</div>
+        <div class="compare-price">$34.500</div>
+        <div class="compare-period">CLP/mes + IVA · sin bot WhatsApp</div>
+        <div class="compare-items">
+          <div class="ci bad"><span class="ci-icon">✗</span>Bot WhatsApp = módulo extra con costo adicional</div>
+          <div class="ci bad"><span class="ci-icon">✗</span>Implementación 48–72 horas hábiles</div>
+          <div class="ci bad"><span class="ci-icon">✗</span>No disponible en Venezuela</div>
+          <div class="ci good"><span class="ci-icon">✓</span>POS web completo</div>
+          <div class="ci good"><span class="ci-icon">✓</span>Menú QR incluido</div>
+        </div>
+      </div>
+      <div class="compare-col hot">
+        <div class="compare-label orange">MesaPOS Pro — tu sistema</div>
+        <div class="compare-price orange">$29.900</div>
+        <div class="compare-period">CLP/mes · todo incluido, sin sorpresas</div>
+        <div class="compare-items">
+          <div class="ci good"><span class="ci-icon">✓</span>Bot WhatsApp 24/7 incluido en el precio</div>
+          <div class="ci good"><span class="ci-icon">✓</span>Activo en 24 horas — mismo día</div>
+          <div class="ci good"><span class="ci-icon">✓</span>Chile y Venezuela en el mismo plan</div>
+          <div class="ci good"><span class="ci-icon">✓</span>POS web completo + 2 terminales</div>
+          <div class="ci good"><span class="ci-icon">✓</span>Menú QR + reportes en tiempo real</div>
+        </div>
+      </div>
+    </div>
+    <div class="anchor-cta reveal">
+      <a href="https://wa.me/56964629963?text=Quiero%20el%20Plan%20Pro%20de%20MesaPOS" class="btn-orange" style="display:inline-flex;font-size:1rem;padding:1rem 2.25rem">Empezar ahora por $29.900/mes →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-tag">Clientes reales</div>
+      <h2>Lo que dicen los que<br/><em>ya lo tienen activo.</em></h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"Antes perdía pedidos de delivery porque WhatsApp me desbordaba. Ahora <strong>el bot atiende todo solo</strong> — yo me entero cuando el pedido ya está confirmado. Me cambió el negocio."</p>
+        <div class="testi-author">
+          <div class="testi-av" style="background:rgba(255,92,0,0.12);color:var(--orange)">MR</div>
+          <div>
+            <div class="testi-name">María R.</div>
+            <div class="testi-biz">Restaurante La Felicitta · Iquique</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi reveal reveal-d1">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"El cierre de caja me tomaba 40 minutos con el cuaderno. Ahora <strong>en 3 clics tengo el resumen del día</strong> completo y detallado. No lo cambiaría por nada."</p>
+        <div class="testi-author">
+          <div class="testi-av" style="background:rgba(139,92,246,0.12);color:#A78BFA">JC</div>
+          <div>
+            <div class="testi-name">Juan C.</div>
+            <div class="testi-biz">Pollería El Brasa · Caracas</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi reveal reveal-d2">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"Pensé que era complicado. Lo activaron en un día y <strong>mis garzones aprendieron en 20 minutos</strong>. La PDA inalámbrica es lo mejor — nadie va más a la caja."</p>
+        <div class="testi-author">
+          <div class="testi-av" style="background:rgba(74,222,128,0.1);color:#4ADE80">AL</div>
+          <div>
+            <div class="testi-name">Ana L.</div>
+            <div class="testi-biz">Café Mirador · Santiago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="guarantee-strip reveal">
+      <span class="guarantee-icon">🛡️</span>
+      <div><strong>Garantía real:</strong> si en los primeros 7 días no ves mejora en el control de tu negocio, te devolvemos el pago. Sin preguntas, sin formularios raros.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-inner" style="text-align:center">
+    <div class="reveal">
+      <div class="section-tag" style="justify-content:center">Planes</div>
+      <h2>Precio fijo.<br/><em>Sin sorpresas.</em></h2>
+      <p class="section-sub" style="margin:0.75rem auto 1.5rem;text-align:center">Sin permanencia mínima · Cancela cuando quieras · Garantía 7 días</p>
+      <div class="urgency"><span class="urgency-dot"></span>Oferta lanzamiento — solo 10 cupos disponibles este mes</div>
+    </div>
+
+    <!-- TOGGLE PAÍS -->
+    <div class="country-toggle reveal" style="display:inline-flex;background:rgba(255,255,255,0.05);border:1px solid var(--border2);border-radius:100px;padding:4px;gap:4px;margin-bottom:2.5rem">
+      <button id="btn-cl" onclick="setCountry('cl')" style="background:var(--orange);color:var(--white);border:none;cursor:pointer;padding:0.5rem 1.25rem;border-radius:100px;font-size:0.8rem;font-weight:600;font-family:var(--syne);transition:all 0.2s">🇨🇱 Chile — CLP</button>
+      <button id="btn-ve" onclick="setCountry('ve')" style="background:transparent;color:var(--gray);border:none;cursor:pointer;padding:0.5rem 1.25rem;border-radius:100px;font-size:0.8rem;font-weight:500;font-family:var(--syne);transition:all 0.2s">🇻🇪 Venezuela — USD</button>
+    </div>
+
+    <!-- NOTA ANUAL -->
+    <div class="reveal" style="margin-bottom:2rem">
+      <div style="display:inline-flex;align-items:center;gap:0.6rem;font-size:0.78rem;color:var(--gray);border:1px solid var(--border);border-radius:8px;padding:0.5rem 1rem">
+        <span style="color:var(--orange)">💡</span>
+        <span>Pago anual: <strong style="color:var(--white)">2 meses gratis</strong> — equivale a un 17% de descuento</span>
+      </div>
+    </div>
 
     <div class="plans">
-      <div class="plan fi">
+      <!-- BÁSICO -->
+      <div class="plan reveal">
         <div class="plan-tier">Básico</div>
-        <div class="plan-usd">$15</div>
-        <div class="plan-per">USD / mes</div>
+        <div class="plan-price" id="price-basic">$19.900</div>
+        <div class="plan-usd" id="period-basic">CLP / mes</div>
+        <div class="plan-desc" id="equiv-basic" style="font-size:0.72rem;color:var(--gray2);margin-bottom:0.5rem">≈ $21 USD · Fudo básico: $25.500</div>
+        <div class="plan-desc">Para empezar a digitalizar tu caja y tu carta. Sin bot.</div>
         <ul class="plan-feats">
-          <li class="y">POS web completo</li>
-          <li class="y">1 terminal</li>
-          <li class="y">Impresión de tickets</li>
-          <li class="y">Menú digital QR</li>
-          <li class="y">Reportes de ventas</li>
-          <li class="n">Bot WhatsApp</li>
-          <li class="n">PDA inalámbrica</li>
+          <li>POS web completo</li>
+          <li>1 terminal</li>
+          <li>Impresión de tickets 80mm</li>
+          <li>Menú digital QR</li>
+          <li>Reportes de ventas</li>
         </ul>
-        <a href="https://wa.me/56964629963?text=Quiero%20el%20Plan%20Básico%20de%20MesaPOS" class="plan-btn outline" target="_blank">Contratar →</a>
+        <a id="link-basic" href="https://wa.me/56964629963?text=Quiero%20el%20Plan%20B%C3%A1sico%20de%20MesaPOS" class="plan-btn ghost">Contratar básico →</a>
       </div>
 
-      <div class="plan hot fi">
-        <div class="hot-badge">⭐ Más popular</div>
+      <!-- PRO -->
+      <div class="plan featured reveal reveal-d1">
+        <div class="plan-badge">⭐ MÁS POPULAR</div>
         <div class="plan-tier">Pro</div>
-        <div class="plan-usd">$25</div>
-        <div class="plan-per">USD / mes</div>
+        <div class="plan-price accent" id="price-pro">$29.900</div>
+        <div class="plan-usd" id="period-pro">CLP / mes</div>
+        <div class="plan-desc" id="equiv-pro" style="font-size:0.72rem;color:rgba(255,92,0,0.6);margin-bottom:0.5rem">≈ $31 USD · Fudo avanzado: $34.500 sin bot</div>
+        <div class="plan-desc">El bot que trabaja por ti, incluido. El que elige la mayoría.</div>
         <ul class="plan-feats">
-          <li class="y">POS web completo</li>
-          <li class="y">2 terminales + PDA</li>
-          <li class="y">Impresión de tickets</li>
-          <li class="y">Menú digital QR</li>
-          <li class="y">Bot WhatsApp incluido</li>
-          <li class="y">Reportes avanzados</li>
-          <li class="y">Soporte remoto</li>
+          <li>POS web completo</li>
+          <li>2 terminales + PDA inalámbrica</li>
+          <li>Bot WhatsApp 24/7 incluido</li>
+          <li>Menú digital QR</li>
+          <li>Reportes avanzados</li>
+          <li>Soporte remoto</li>
         </ul>
-        <a href="https://wa.me/56964629963?text=Quiero%20el%20Plan%20Pro%20de%20MesaPOS" class="plan-btn filled" target="_blank">Contratar →</a>
+        <a id="link-pro" href="https://wa.me/56964629963?text=Quiero%20el%20Plan%20Pro%20de%20MesaPOS" class="plan-btn main">Contratar Pro →</a>
       </div>
 
-      <div class="plan fi">
+      <!-- PREMIUM -->
+      <div class="plan reveal reveal-d2">
         <div class="plan-tier">Premium</div>
-        <div class="plan-usd">$45</div>
-        <div class="plan-per">USD / mes</div>
+        <div class="plan-price" id="price-prem">$49.900</div>
+        <div class="plan-usd" id="period-prem">CLP / mes</div>
+        <div class="plan-desc" id="equiv-prem" style="font-size:0.72rem;color:var(--gray2);margin-bottom:0.5rem">≈ $52 USD · Fudo Pro: $52.500 + módulos extra</div>
+        <div class="plan-desc">Sistema completo personalizado a tu marca y operación.</div>
         <ul class="plan-feats">
-          <li class="y">Todo lo del plan Pro</li>
-          <li class="y">Terminales ilimitadas</li>
-          <li class="y">Bot personalizado</li>
-          <li class="y">Diseño a tu marca</li>
-          <li class="y">Soporte prioritario 24/7</li>
-          <li class="y">Capacitación incluida</li>
-          <li class="y">Actualizaciones gratis</li>
+          <li>Todo lo del plan Pro</li>
+          <li>Terminales ilimitadas</li>
+          <li>Bot con tu marca y personalidad</li>
+          <li>Diseño a tu identidad visual</li>
+          <li>Soporte prioritario 24/7</li>
+          <li>Capacitación incluida</li>
         </ul>
-        <a href="https://wa.me/56964629963?text=Quiero%20el%20Plan%20Premium%20de%20MesaPOS" class="plan-btn outline" target="_blank">Contratar →</a>
+        <a id="link-prem" href="https://wa.me/56964629963?text=Quiero%20el%20Plan%20Premium%20de%20MesaPOS" class="plan-btn ghost">Contratar Premium →</a>
+      </div>
+    </div>
+
+    <!-- ANUAL -->
+    <div class="reveal" style="margin-top:2rem;background:rgba(255,92,0,0.05);border:1px solid rgba(255,92,0,0.15);border-radius:12px;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;text-align:left">
+      <div>
+        <div style="font-size:0.875rem;font-weight:600;color:var(--white);margin-bottom:0.25rem">Pago anual — 2 meses gratis</div>
+        <div style="font-size:0.78rem;color:var(--gray)">Paga 10 meses y accede 12. Descuento equivalente al 17%. Sin permanencia adicional.</div>
+      </div>
+      <a href="https://wa.me/56964629963?text=Quiero%20info%20sobre%20el%20plan%20anual%20de%20MesaPOS" class="btn-orange" style="font-size:0.82rem;padding:0.65rem 1.25rem;white-space:nowrap">Consultar plan anual →</a>
+    </div>
+
+    <p class="plan-note reveal" style="margin-top:1.5rem">7 días de garantía · Sin permanencia · Cancela cuando quieras</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="section-inner" style="text-align:center">
+    <div class="reveal">
+      <div class="section-tag" style="justify-content:center">FAQ</div>
+      <h2>Las preguntas que<br/><em>todos hacen.</em></h2>
+    </div>
+    <div class="faq-wrap">
+      <div class="faq-item">
+        <div class="faq-q">¿Realmente lo activan en 24 horas? <span class="faq-toggle">+</span></div>
+        <div class="faq-a">Sí. Una vez que confirmas el plan y nos envías el menú, configuramos todo — POS, bot y QR — y hacemos una videollamada para dejarte operativo. El promedio real es 4–6 horas hábiles.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Necesito instalar algo o comprar hardware? <span class="faq-toggle">+</span></div>
+        <div class="faq-a">No. El POS corre en el navegador Chrome desde cualquier PC, tablet o celular. La única excepción es la impresora de tickets, que conectas por USB a la PC de caja — ya funciona con la que tienes o con una Xprinter estándar de bajo costo.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿El bot funciona con mi número de WhatsApp actual? <span class="faq-toggle">+</span></div>
+        <div class="faq-a">Sí. El bot funciona desde tu propio número de WhatsApp Business. Tus clientes escriben al mismo número que ya conocen — el bot responde automáticamente. No hay número extraño de por medio.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Qué pasa si se cae el internet en mi local? <span class="faq-toggle">+</span></div>
+        <div class="faq-a">El sistema requiere conexión para sincronizarse en tiempo real. Si el internet cae, el POS puede seguir operando localmente de forma limitada, pero el bot de WhatsApp necesita conexión activa para responder pedidos.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Puedo cancelar cuando quiera? <span class="faq-toggle">+</span></div>
+        <div class="faq-a">Absolutamente. Sin contrato, sin permanencia. Si en algún mes decides pausar o cancelar, lo haces sin penalidades. Queremos que te quedes porque el sistema te sirve — no porque estés atrapado.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Cómo pago si estoy en Venezuela? <span class="faq-toggle">+</span></div>
+        <div class="faq-a">En Venezuela aceptamos Zelle, PayPal, USDT y Binance Pay. En Chile: transferencia bancaria, débito/crédito y WebPay. Todo en USD para mantener el precio estable.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PAISES -->
-<section class="paises">
-  <div class="tag cyan fi" style="display:inline-block">Disponible en</div>
-  <h2 class="section-h fi" style="text-align:center;max-width:100%;margin:0.5rem auto 0">Chile y Venezuela</h2>
-  <div class="paises-row">
-    <div class="pais fi">
-      <div class="pais-flag">🇨🇱</div>
-      <div class="pais-name">Chile</div>
-      <div class="pais-pays">Transferencia bancaria<br>Tarjeta débito / crédito<br>WebPay</div>
+<!-- FINAL CTA -->
+<section class="final">
+  <div class="final-bg"></div>
+  <div class="final-inner reveal">
+    <h2>¿Listo para dejar de<br/>perder pedidos<br/><em>desde hoy?</em></h2>
+    <p class="final-sub">Una demo de 15 minutos es todo lo que necesitas para ver si MesaPOS resuelve tu problema. Sin compromiso, sin presión, sin vendedores insistentes.</p>
+    <div class="final-actions">
+      <a href="https://wa.me/56964629963?text=Hola,%20quiero%20una%20demo%20gratuita%20de%20MesaPOS" class="btn-final primary">💬 Hablar por WhatsApp — Chile</a>
+      <a href="https://t.me/mesapos" class="btn-final secondary">✈️ Telegram — Venezuela</a>
     </div>
-    <div class="pais fi">
-      <div class="pais-flag">🇻🇪</div>
-      <div class="pais-name">Venezuela</div>
-      <div class="pais-pays">Zelle · PayPal<br>USDT · Binance Pay<br>Telegram</div>
+    <div class="final-meta">
+      <span>Activo en 24 horas</span>
+      <span class="meta-sep">·</span>
+      <span>Desde $19.900 CLP/mes</span>
+      <span class="meta-sep">·</span>
+      <span>Sin permanencia</span>
+      <span class="meta-sep">·</span>
+      <span>Garantía 7 días</span>
     </div>
-  </div>
-</section>
-
-<!-- TESTIMONIAL -->
-<section class="testi">
-  <div class="testi-quote fi">
-    "Desde que instalamos MesaPOS, <em>el bot toma pedidos solo por WhatsApp</em>, imprimimos tickets desde cualquier dispositivo y los cierres de caja son mucho más rápidos y ordenados."
-  </div>
-  <div class="testi-who fi">
-    <div class="testi-ava">🍽️</div>
-    <div>
-      <div class="testi-n">La Felicitta</div>
-      <div class="testi-r">Restaurante · Iquique, Chile · Cliente desde 2026</div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA FINAL -->
-<section class="cta" id="contacto">
-  <div class="cta-blob"></div>
-  <h2 class="fi">¿Listo para<br><span>digitalizar</span><br>tu restaurante?</h2>
-  <p class="fi">Escríbenos hoy — activamos tu sistema en 24 horas.</p>
-  <div class="cta-row fi">
-    <a href="https://wa.me/56964629963?text=Hola,%20quiero%20digitalizar%20mi%20restaurante%20con%20MesaPOS" class="btn-wa" target="_blank">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      WhatsApp · Chile
-    </a>
-    <a href="https://t.me/mesapos" class="btn-tg" target="_blank">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-      Telegram · Venezuela
-    </a>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="f-logo">Mesa<span>POS</span></div>
+  <div class="logo">Mesa<span>POS</span></div>
   <p>Sistema digital para restaurantes · Chile & Venezuela · 2026</p>
   <p>mesapos.app</p>
 </footer>
 
 <script>
-// Cursor
-const cur = document.getElementById('cur');
-document.addEventListener('mousemove', e => {
-  cur.style.left = e.clientX - 6 + 'px';
-  cur.style.top = e.clientY - 6 + 'px';
-});
+// Country toggle
+const prices={
+  cl:{basic:'$19.900',pro:'$29.900',prem:'$49.900',
+      period:'CLP / mes',
+      equivBasic:'≈ $21 USD · 22% más barato que Fudo básico ($25.500)',
+      equivPro:'≈ $31 USD · Fudo avanzado cobra $34.500 sin bot',
+      equivPrem:'≈ $52 USD · Fudo Pro cobra $52.500 + módulos extra',
+      waBasic:'Quiero%20el%20Plan%20B%C3%A1sico%20de%20MesaPOS%20-%20Chile',
+      waPro:'Quiero%20el%20Plan%20Pro%20de%20MesaPOS%20-%20Chile',
+      waPrem:'Quiero%20el%20Plan%20Premium%20de%20MesaPOS%20-%20Chile'},
+  ve:{basic:'$21 USD',pro:'$31 USD',prem:'$52 USD',
+      period:'USD / mes',
+      equivBasic:'Pago por Zelle · PayPal · USDT · Binance Pay',
+      equivPro:'Pago por Zelle · PayPal · USDT · Binance Pay',
+      equivPrem:'Pago por Zelle · PayPal · USDT · Binance Pay',
+      waBasic:'Quiero%20el%20Plan%20B%C3%A1sico%20de%20MesaPOS%20-%20Venezuela',
+      waPro:'Quiero%20el%20Plan%20Pro%20de%20MesaPOS%20-%20Venezuela',
+      waPrem:'Quiero%20el%20Plan%20Premium%20de%20MesaPOS%20-%20Venezuela'}
+};
+function setCountry(c){
+  const p=prices[c];
+  document.getElementById('price-basic').textContent=p.basic;
+  document.getElementById('price-pro').textContent=p.pro;
+  document.getElementById('price-prem').textContent=p.prem;
+  document.getElementById('period-basic').textContent=p.period;
+  document.getElementById('period-pro').textContent=p.period;
+  document.getElementById('period-prem').textContent=p.period;
+  document.getElementById('equiv-basic').textContent=p.equivBasic;
+  document.getElementById('equiv-pro').textContent=p.equivPro;
+  document.getElementById('equiv-prem').textContent=p.equivPrem;
+  document.getElementById('link-basic').href='https://wa.me/56964629963?text='+p.waBasic;
+  document.getElementById('link-pro').href='https://wa.me/56964629963?text='+p.waPro;
+  document.getElementById('link-prem').href='https://wa.me/56964629963?text='+p.waPrem;
+  const btnCl=document.getElementById('btn-cl');
+  const btnVe=document.getElementById('btn-ve');
+  if(c==='cl'){
+    btnCl.style.background='var(--orange)';btnCl.style.color='var(--white)';
+    btnVe.style.background='transparent';btnVe.style.color='var(--gray)';
+  }else{
+    btnVe.style.background='var(--orange)';btnVe.style.color='var(--white)';
+    btnCl.style.background='transparent';btnCl.style.color='var(--gray)';
+  }
+}
 
-// Scroll animations
-const io = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('v'), i * 80);
-    }
+document.querySelectorAll('.faq-q').forEach(q=>{
+  q.addEventListener('click',()=>{
+    const item=q.parentElement;
+    const isOpen=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!isOpen)item.classList.add('open');
   });
-}, { threshold: 0.1 });
-document.querySelectorAll('.fi').forEach(el => io.observe(el));
+});
+// Reveal on scroll
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}
+  });
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
 </body>
 </html>
