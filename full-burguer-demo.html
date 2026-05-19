@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo MesaPOS — Full Burguer</title>
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#0b0b0b;
+  color:#fff;
+}
+header{
+  padding:28px 20px;
+  text-align:center;
+  background:linear-gradient(135deg,#111,#ff5c00);
+}
+.logo{
+  font-size:32px;
+  font-weight:900;
+}
+.logo span{color:#ff5c00}
+.demo-tag{
+  margin-top:8px;
+  font-size:14px;
+  opacity:.9;
+}
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:30px 18px;
+}
+.business{
+  background:#151515;
+  border:1px solid #333;
+  border-radius:16px;
+  padding:24px;
+  margin-bottom:28px;
+}
+.business h1{
+  margin:0 0 10px;
+  font-size:34px;
+}
+.business p{
+  color:#ccc;
+  margin:6px 0;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:18px;
+}
+.card{
+  background:#151515;
+  border:1px solid #2a2a2a;
+  border-radius:16px;
+  padding:18px;
+}
+.card h2{
+  color:#ff5c00;
+  margin-top:0;
+  font-size:22px;
+}
+.item{
+  border-bottom:1px solid #2a2a2a;
+  padding:12px 0;
+}
+.item:last-child{border-bottom:none}
+.item-title{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-weight:800;
+}
+.price{
+  color:#ffcc00;
+  white-space:nowrap;
+}
+.desc{
+  color:#bbb;
+  font-size:14px;
+  margin-top:5px;
+  line-height:1.4;
+}
+.cta{
+  margin-top:30px;
+  background:#ff5c00;
+  color:white;
+  text-align:center;
+  padding:22px;
+  border-radius:16px;
+}
+.cta h2{margin:0 0 8px}
+.cta p{margin:0 0 16px}
+.btn{
+  display:inline-block;
+  background:#fff;
+  color:#111;
+  padding:14px 22px;
+  border-radius:10px;
+  font-weight:800;
+  text-decoration:none;
+}
+footer{
+  text-align:center;
+  padding:25px;
+  color:#777;
+  font-size:13px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Mesa<span>POS</span></div>
+  <div class="demo-tag">Demo comercial preparada para Full Burguer</div>
+</header>
+
+<div class="container">
+
+  <section class="business">
+    <h1>Full Burguer</h1>
+    <p><strong>Tipo de negocio:</strong> Comida rápida / Hamburguesas</p>
+    <p><strong>Ciudad:</strong> Iquique</p>
+    <p><strong>Dirección:</strong> Juan Martínez 1006 esquina Vicente Zegers, Iquique</p>
+    <p><strong>Instagram:</strong> @full_burguer_</p>
+  </section>
+
+  <div class="grid">
+
+    <div class="card">
+      <h2>Completos</h2>
+      <div class="item"><div class="item-title">Hot Dog Salsas <span class="price">$1.500</span></div><div class="desc">Pan, vienesa, mayo y ketchup.</div></div>
+      <div class="item"><div class="item-title">Italiano <span class="price">$2.000</span></div><div class="desc">Pan, vienesa, palta, tomate, mayo y ketchup.</div></div>
+      <div class="item"><div class="item-title">Has <span class="price">$3.500</span></div><div class="desc">Pan, carne, tomate, palta, mayo y ketchup.</div></div>
+      <div class="item"><div class="item-title">Papapleto <span class="price">$3.500</span></div><div class="desc">Pan, vienesa, papas fritas, palta, tomate, mayo y ketchup.</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Churrascos / Ave</h2>
+      <div class="item"><div class="item-title">Italiano <span class="price">$5.000</span></div><div class="desc">Pan, carne, tomate, palta y mayo.</div></div>
+      <div class="item"><div class="item-title">Americano <span class="price">$5.000</span></div><div class="desc">Pan, carne, queso, jamón, huevo, mayo y ketchup.</div></div>
+      <div class="item"><div class="item-title">Barro Luco <span class="price">$5.000</span></div><div class="desc">Pan, carne, queso, mayo y ketchup.</div></div>
+      <div class="item"><div class="item-title">Diputado <span class="price">$5.000</span></div><div class="desc">Pan, carne, huevo, mayo y ketchup.</div></div>
+      <div class="item"><div class="item-title">Brasileño <span class="price">$5.000</span></div><div class="desc">Pan, carne, palta, queso, mayo y ketchup.</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Hamburguesas</h2>
+      <div class="item"><div class="item-title">Clásica <span class="price">$5.000</span></div><div class="desc">Carne o pollo 200g, lechuga, tomate, repollo con cilantro, papa hilo, jamón, queso, mayo y ketchup.</div></div>
+      <div class="item"><div class="item-title">Especial <span class="price">$6.500</span></div><div class="desc">Carne o pollo 200g, lechuga, tomate, huevo, queso, tocino y papas fritas.</div></div>
+      <div class="item"><div class="item-title">Mixta <span class="price">$8.000</span></div><div class="desc">Carne, pollo o chuleta ahumada. Puede elegir 2 proteínas.</div></div>
+      <div class="item"><div class="item-title">Italiana <span class="price">$5.000</span></div><div class="desc">Pan brioche, carne 200g, palta, tomate, mayo y ketchup.</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Carne Mechada</h2>
+      <div class="item"><div class="item-title">Clásica <span class="price">$6.000</span></div><div class="desc">Carne mechada, lechuga, tomate, repollo con cilantro, papa hilo, jamón y queso.</div></div>
+      <div class="item"><div class="item-title">Especial <span class="price">$7.500</span></div><div class="desc">Carne mechada, huevo, queso, tocino, papas fritas, mayo y ketchup.</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Chuleta Ahumada</h2>
+      <div class="item"><div class="item-title">Clásica <span class="price">$5.000</span></div><div class="desc">Chuleta ahumada, lechuga, tomate, repollo, papa hilo, jamón y queso.</div></div>
+      <div class="item"><div class="item-title">Especial <span class="price">$6.500</span></div><div class="desc">Chuleta ahumada, queso, tocino, huevo y papas fritas.</div></div>
+      <div class="item"><div class="item-title">Triple <span class="price">$9.500</span></div><div class="desc">Chuleta ahumada, carne, pollo, huevo, queso, tocino y papas fritas.</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Perros Calientes</h2>
+      <div class="item"><div class="item-title">Clásico <span class="price">$2.000</span></div><div class="desc">Pan, doble vienesa, repollo con cilantro, cebolla, papa hilo, queso rallado, mayo y ketchup.</div></div>
+      <div class="item"><div class="item-title">Especial Tocino Choclo <span class="price">$2.800</span></div></div>
+      <div class="item"><div class="item-title">Especial Carne Mechada <span class="price">$4.000</span></div></div>
+      <div class="item"><div class="item-title">Especial Pollo <span class="price">$3.500</span></div></div>
+      <div class="item"><div class="item-title">Mixto Pollo y Carne <span class="price">$4.000</span></div></div>
+    </div>
+
+    <div class="card">
+      <h2>Salchipapas</h2>
+      <div class="item"><div class="item-title">Clásica Personal <span class="price">$5.500</span></div></div>
+      <div class="item"><div class="item-title">Clásica Doble <span class="price">$10.000</span></div></div>
+      <div class="item"><div class="item-title">Clásica Familiar <span class="price">$19.000</span></div></div>
+      <div class="item"><div class="item-title">Especial Personal <span class="price">$6.500</span></div></div>
+      <div class="item"><div class="item-title">Especial Doble <span class="price">$12.000</span></div></div>
+      <div class="item"><div class="item-title">Especial Familiar <span class="price">$23.000</span></div></div>
+    </div>
+
+    <div class="card">
+      <h2>Otros</h2>
+      <div class="item"><div class="item-title">Club House <span class="price">$12.000</span></div><div class="desc">Pan de sandwich, pollo, chuleta ahumada, jamón, lechuga, tomate, huevo, queso, papa frita y salsas.</div></div>
+      <div class="item"><div class="item-title">Pepito 40cm <span class="price">$12.000</span></div><div class="desc">Carne, pollo, chuleta, jamón, queso, lechuga, tomate, tocino, huevo, papa hilo, repollo y cebolla.</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Salsas</h2>
+      <div class="item"><div class="desc">Ajo, queso, tocino, choclo, picante, locoto, mostaza, BBQ, ketchup y mayo.</div></div>
+    </div>
+
+  </div>
+
+  <section class="cta">
+    <h2>Demo de implementación MesaPOS</h2>
+    <p>Menú digital, sistema de caja, pedidos por WhatsApp, reportes y control de ventas para Full Burguer.</p>
+    <a class="btn" href="https://mesapos.app/">Ver MesaPOS</a>
+  </section>
+
+</div>
+
+<footer>
+  Demo comercial creada por Lenin Rodriguez para presentar MesaPOS. Esta página no modifica el sistema madre.
+</footer>
+
+</body>
+</html>
