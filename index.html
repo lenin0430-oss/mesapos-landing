@@ -114,6 +114,18 @@ h2 em{color:var(--orange);font-style:normal}
 .prod-features{list-style:none;display:flex;flex-direction:column;gap:0.55rem}
 .prod-features li{font-size:0.78rem;color:var(--gray);display:flex;align-items:flex-start;gap:0.6rem;line-height:1.5}
 .prod-features li::before{content:'—';color:var(--orange);font-weight:600;flex-shrink:0}
+.included{margin-top:3.5rem;padding:2.25rem;background:#0D0D0D;border:1px solid var(--border);border-radius:16px;position:relative;overflow:hidden}
+.included::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 100% 0%,rgba(255,92,0,0.08) 0%,transparent 55%);pointer-events:none}
+.included-head{position:relative;display:flex;justify-content:space-between;gap:2rem;align-items:flex-end;margin-bottom:1.75rem}
+.included-kicker{font-size:0.68rem;color:var(--orange);text-transform:uppercase;letter-spacing:0.12em;font-weight:700;margin-bottom:0.5rem}
+.included-title{font-family:var(--syne);font-size:clamp(1.5rem,3vw,2.25rem);font-weight:800;line-height:1.08;letter-spacing:-0.03em}
+.included-title em{color:var(--orange);font-style:normal}
+.included-sub{font-size:0.86rem;color:var(--gray);line-height:1.65;max-width:420px;font-weight:300}
+.included-grid{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.included-card{background:var(--ink);padding:1.25rem;min-height:150px}
+.included-icon{width:34px;height:34px;border-radius:8px;background:var(--orange-pale);border:1px solid rgba(255,92,0,0.2);display:flex;align-items:center;justify-content:center;font-size:1rem;margin-bottom:0.85rem}
+.included-name{font-size:0.86rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:0.4rem}
+.included-text{font-size:0.76rem;color:var(--gray);line-height:1.55;font-weight:300}
 .forwho{padding:6rem 2.5rem}
 .forwho-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start;margin-top:3.5rem}
 .profile-stack{display:flex;flex-direction:column;gap:1rem}
@@ -209,7 +221,8 @@ footer p{font-size:0.75rem;color:var(--gray2);font-weight:300}
 @media(max-width:900px){
   .hero-inner,.forwho-grid{grid-template-columns:1fr}
   .hero-visual{display:none}
-  .products-grid,.testi-grid,.plans{grid-template-columns:1fr}
+  .products-grid,.testi-grid,.plans,.included-grid{grid-template-columns:1fr}
+  .included-head{flex-direction:column;align-items:flex-start}
   .pain-grid,.compare-wrap{grid-template-columns:1fr}
   .numbers-inner{grid-template-columns:repeat(2,1fr)}
   nav{padding:1rem 1.25rem}
@@ -341,6 +354,25 @@ footer p{font-size:0.75rem;color:var(--gray2);font-weight:300}
       <div class="prod-card reveal"><div class="prod-num">01</div><div class="prod-icon">🖥️</div><div class="prod-name">POS Web</div><div class="prod-desc">Sistema de caja completo en el navegador. Sin instalar nada. Funciona en cualquier PC, tablet o celular con Chrome.</div><ul class="prod-features"><li>Gestión de mesas y comandas en tiempo real</li><li>Impresión de tickets 80mm</li><li>Compatible con PDA inalámbrica (dispositivo aparte)</li><li>Múltiples métodos de pago</li><li>Apertura y cierre de turno</li><li>Reportes de ventas del día</li></ul></div>
       <div class="prod-card reveal reveal-d1"><div class="prod-num">02</div><div class="prod-icon">🤖</div><div class="prod-name">Bot WhatsApp</div><div class="prod-desc">Un vendedor que trabaja 24/7 sin sueldo. Toma pedidos, calcula el total, gestiona delivery y confirma — solo.</div><ul class="prod-features"><li>Atiende múltiples clientes a la vez</li><li>Menú actualizado en tiempo real</li><li>Gestiona delivery y retiro en tienda</li><li>Cobra transferencia o efectivo</li><li>Confirma el pedido automáticamente</li><li>Funciona desde tu número actual</li></ul></div>
       <div class="prod-card reveal reveal-d2"><div class="prod-num">03</div><div class="prod-icon">📱</div><div class="prod-name">Menú QR</div><div class="prod-desc">Tu carta digital que el cliente escanea en la mesa. Sin papel. Sin app que descargar. Siempre actualizada.</div><ul class="prod-features"><li>Código QR único por mesa</li><li>Actualización instantánea desde el sistema</li><li>Fotos y descripción de platos</li><li>Permite hacer pedidos directamente</li><li>Funciona en cualquier celular</li><li>Sin descarga ni registro del cliente</li></ul></div>
+    </div>
+    <div class="included reveal">
+      <div class="included-head">
+        <div>
+          <div class="included-kicker">Funciones incluidas</div>
+          <div class="included-title">No es solo caja.<br/>Es <em>control completo</em> del local.</div>
+        </div>
+        <p class="included-sub">MesaPOS ayuda al dueño a ver ventas, cocina, gastos, stock y margen desde el mismo sistema. Menos cuaderno, menos desorden y mejores decisiones.</p>
+      </div>
+      <div class="included-grid">
+        <div class="included-card"><div class="included-icon">01</div><div class="included-name">Control de caja</div><div class="included-text">Ventas, métodos de pago, comandas, mesas, cobros, aperturas y cierre de turno.</div></div>
+        <div class="included-card"><div class="included-icon">02</div><div class="included-name">Cocina en tiempo real</div><div class="included-text">Las comandas llegan a cocina para evitar pedidos perdidos, dobles anotaciones y atrasos.</div></div>
+        <div class="included-card"><div class="included-icon">03</div><div class="included-name">Reportes del negocio</div><div class="included-text">Ventas del día, productos más vendidos, ticket promedio y detalle de órdenes.</div></div>
+        <div class="included-card"><div class="included-icon">04</div><div class="included-name">Gastos del local</div><div class="included-text">Registra ingredientes, sueldos, arriendo, servicios y otros egresos del negocio.</div></div>
+        <div class="included-card"><div class="included-icon">05</div><div class="included-name">Costeo y margen</div><div class="included-text">Calcula cuánto cuesta preparar cada plato y cuánto margen deja cada venta.</div></div>
+        <div class="included-card"><div class="included-icon">06</div><div class="included-name">Stock e insumos</div><div class="included-text">Controla inventario, compras del día, productos bajos, agotados y mermas.</div></div>
+        <div class="included-card"><div class="included-icon">07</div><div class="included-name">Recetas por producto</div><div class="included-text">Asocia ingredientes a cada preparación para ordenar costos y producción.</div></div>
+        <div class="included-card"><div class="included-icon">08</div><div class="included-name">Usuarios y permisos</div><div class="included-text">Cada local trabaja con su logo, menú, mesas, usuarios y datos separados.</div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -478,6 +510,7 @@ footer p{font-size:0.75rem;color:var(--gray2);font-weight:300}
       <a href="https://wa.me/56964629963?text=Quiero%20info%20sobre%20el%20plan%20anual%20de%20MesaPOS" class="btn-orange" style="font-size:0.82rem;padding:0.65rem 1.25rem;white-space:nowrap">Consultar plan anual →</a>
     </div>
     <p class="plan-note reveal" style="margin-top:1.5rem">Pagos por transferencia bancaria · Débito/crédito · WebPay</p>
+    <p class="plan-note reveal" style="margin-top:0.65rem;max-width:760px;margin-left:auto;margin-right:auto;line-height:1.6">Los equipos físicos como impresora, computador, tablet, PDA o terminal de pago no están incluidos en el plan. MesaPOS incluye instalación, configuración, asesoría y puesta en marcha del sistema.</p>
   </div>
 </section>
 
